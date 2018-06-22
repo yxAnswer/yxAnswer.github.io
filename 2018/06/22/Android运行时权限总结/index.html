@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="android," />
 
 
 
@@ -81,16 +81,20 @@
 
 
 
-<meta name="description" content="个人技术笔记以及技术积累">
-<meta property="og:type" content="website">
-<meta property="og:title" content="技术成长之路">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android运行时权限总结">
+<meta property="og:url" content="http://yoursite.com/2018/06/22/Android运行时权限总结/index.html">
 <meta property="og:site_name" content="技术成长之路">
-<meta property="og:description" content="个人技术笔记以及技术积累">
+<meta property="og:description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/bVZBii">
+<meta property="og:updated_time" content="2018-06-22T03:50:52.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="技术成长之路">
-<meta name="twitter:description" content="个人技术笔记以及技术积累">
+<meta name="twitter:title" content="Android运行时权限总结">
+<meta name="twitter:description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
+<meta name="twitter:image" content="http://yoursite.com/img/bVZBii">
 
 
 
@@ -120,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/22/Android运行时权限总结/"/>
 
 
 
 
 
-  <title>技术成长之路</title>
+  <title>Android运行时权限总结 | 技术成长之路</title>
   
 
 
@@ -145,8 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -269,9 +272,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -301,9 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/22/Android运行时权限总结/" itemprop="url">Android运行时权限总结</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android运行时权限总结</h1>
         
 
         <div class="post-meta">
@@ -375,9 +376,7 @@
       
 
       
-        
-          
-            <p>###1、android6.0以后的危险权限介绍<br>（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）<br>android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：</p>
+        <p>###1、android6.0以后的危险权限介绍<br>（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）<br>android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：</p>
 <table>
 <thead>
 <tr>
@@ -573,8 +572,6 @@ if (EasyPermissions.hasPermissions(this, perms)) {
 <p>归根结底：android M (6.0)以后，申请权限组一个，即表示整个权限组可以用，所以我们干脆，只要api 版本大于23（6.0）,我们申请的权限就是申请整个权限组。这样就兼容了android8.0——————-为了省事的话可以用AndPermission这个第三方框架，或者自己封装一个。</p>
 </blockquote>
 
-          
-        
       
     </div>
     
@@ -589,14 +586,20 @@ if (EasyPermissions.hasPermissions(this, perms)) {
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -606,10 +609,11 @@ if (EasyPermissions.hasPermissions(this, perms)) {
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -617,6 +621,10 @@ if (EasyPermissions.hasPermissions(this, perms)) {
 
 
           
+
+  
+
+
 
         </div>
         
@@ -849,6 +857,10 @@ if (EasyPermissions.hasPermissions(this, perms)) {
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
