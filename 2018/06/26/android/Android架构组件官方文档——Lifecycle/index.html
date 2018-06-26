@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="使用生命周期感知组件处理生命周期 支持生命周期的组件执行操作以响应另一个组件（例如Activity和fragment）的生命周期状态更改。这些组件可帮助您生成组织性更好，并且通常更轻量的代码，这些代码更易于维护。   常见的模式是在Activity和fragment的生命周期方法中实现依赖组件的操作。但是，这种模式导致代码的组织不良以及错误泛滥。通过使用生命周期感知组件，您可以将相关组件的代码从生">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android架构组件官方文档——Lifecycle">
+<meta property="og:url" content="http://yoursite.com/2018/06/26/android/Android架构组件官方文档——Lifecycle/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="使用生命周期感知组件处理生命周期 支持生命周期的组件执行操作以响应另一个组件（例如Activity和fragment）的生命周期状态更改。这些组件可帮助您生成组织性更好，并且通常更轻量的代码，这些代码更易于维护。   常见的模式是在Activity和fragment的生命周期方法中实现依赖组件的操作。但是，这种模式导致代码的组织不良以及错误泛滥。通过使用生命周期感知组件，您可以将相关组件的代码从生">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180626/DJk2i4fhm9.png?imageslim">
+<meta property="og:updated_time" content="2018-06-26T09:15:21.171Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android架构组件官方文档——Lifecycle">
+<meta name="twitter:description" content="使用生命周期感知组件处理生命周期 支持生命周期的组件执行操作以响应另一个组件（例如Activity和fragment）的生命周期状态更改。这些组件可帮助您生成组织性更好，并且通常更轻量的代码，这些代码更易于维护。   常见的模式是在Activity和fragment的生命周期方法中实现依赖组件的操作。但是，这种模式导致代码的组织不良以及错误泛滥。通过使用生命周期感知组件，您可以将相关组件的代码从生">
+<meta name="twitter:image" content="http://oima95jt3.bkt.clouddn.com/blog/180626/DJk2i4fhm9.png?imageslim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/26/android/Android架构组件官方文档——Lifecycle/"/>
+
+
+
+
+
+  <title>Android架构组件官方文档——Lifecycle | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/26/android/Android架构组件官方文档——Lifecycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android架构组件官方文档——Lifecycle</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-26T17:14:34+08:00">
+                2018-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="使用生命周期感知组件处理生命周期"><a href="#使用生命周期感知组件处理生命周期" class="headerlink" title="使用生命周期感知组件处理生命周期"></a>使用生命周期感知组件处理生命周期</h2><blockquote>
+<p>支持生命周期的组件执行操作以响应另一个组件（例如Activity和fragment）的生命周期状态更改。这些组件可帮助您生成组织性更好，并且通常更轻量的代码，这些代码更易于维护。</p>
+</blockquote>
+<blockquote>
+<p>常见的模式是在Activity和fragment的生命周期方法中实现依赖组件的操作。<br>但是，这种模式导致代码的组织不良以及错误泛滥。通过使用生命周期感知组件，您可以将相关组件的代码从生命周期方法中移出并移入组件本身。</p>
+</blockquote>
+<blockquote>
+<p>android.arch.lifecycle包提供了类和接口，可让您构建支持生命周期的组件，这些组件可根据活动或片段的当前生命周期状态自动调整其行为<br><strong> 注意：要将<a href="https://developer.android.com/reference/android/arch/lifecycle/package-summary" target="_blank" rel="noopener">android.arch.lifecycle</a>导入到Android项目中，请参阅<a href="https://developer.android.com/topic/libraries/architecture/adding-components#lifecycle" target="_blank" rel="noopener">向项目添加组件</a>。 </strong></p>
+</blockquote>
+<blockquote>
+<p>Android框架中定义的大多数应用程序组件都附带有生命周期。生命周期由操作系统或您的流程中运行的框架代码管理。它们是Android如何工作和应用程序必须尊重它们的核心。不这样做可能会触发内存泄漏甚至应用程序崩溃。</p>
+</blockquote>
+<p>想象一下，我们有一个在屏幕上显示设备位置的Activity。<br>常见的实现可能如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLocationListener</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyLocationListener</span><span class="params">(Context context, Callback callback)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// connect to system location service</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// disconnect from system location service</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MyLocationListener myLocationListener;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(...)</span> </span>&#123;</span><br><span class="line">        myLocationListener = <span class="keyword">new</span> MyLocationListener(<span class="keyword">this</span>, (location) -&gt; &#123;</span><br><span class="line">            <span class="comment">// update UI</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStart();</span><br><span class="line">        myLocationListener.start();</span><br><span class="line">        <span class="comment">// manage other components that need to respond</span></span><br><span class="line">        <span class="comment">// to the activity lifecycle</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStop();</span><br><span class="line">        myLocationListener.stop();</span><br><span class="line">        <span class="comment">// manage other components that need to respond</span></span><br><span class="line">        <span class="comment">// to the activity lifecycle</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   尽管这个示例看起来很好，但在实际的应用程序中，您最终会有太多的调用来管理UI和其他组件，以响应当前的生命周期状态。<br>管理多个组件会在生命周期方法中放置大量代码，例如onStart（）和onStop（），这使得它们很难维护。</p>
+<p>此外，无法保证组件在活动或片段停止之前启动。<br>如果我们需要执行一个长时间运行的操作，比如onStart（）中的一些配置检查，情况尤其如此。<br>这可能会导致onStop（）方法在onStart（）之前完成的争用条件，从而使组件的存活时间超过所需的时间。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MyLocationListener myLocationListener;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(...)</span> </span>&#123;</span><br><span class="line">        myLocationListener = <span class="keyword">new</span> MyLocationListener(<span class="keyword">this</span>, location -&gt; &#123;</span><br><span class="line">            <span class="comment">// update UI</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStart();</span><br><span class="line">        Util.checkUserStatus(result -&gt; &#123;</span><br><span class="line">            <span class="comment">// what if this callback is invoked AFTER activity is stopped?</span></span><br><span class="line">            <span class="keyword">if</span> (result) &#123;</span><br><span class="line">                myLocationListener.start();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStop();</span><br><span class="line">        myLocationListener.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://developer.android.com/reference/android/arch/lifecycle/package-summary" target="_blank" rel="noopener">android.arch.lifecycle</a>包提供的类和接口可帮助您以弹性和独立的方式解决这些问题。</p>
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><p><a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle" target="_blank" rel="noopener">Lifecycle</a>是一个持有组件生命周期状态（如Activity或Fragment）的信息的类，并允许其他对象观察此状态。<br><a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle" target="_blank" rel="noopener">Lifecycle</a>使用两个主要枚举来跟踪其关联组件的生命周期状态：</p>
+<h4 id="Event"><a href="#Event" class="headerlink" title="Event"></a>Event</h4><p>&emsp;&emsp;从框架和Lifecycle类派发的生命周期事件。<br>&emsp;&emsp;这些事件映射到Activities和fragments中的回调事件。</p>
+<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><p>&emsp;&emsp;由Lifecycle对象跟踪的组件的当前状态。</p>
+<p><img src="http://oima95jt3.bkt.clouddn.com/blog/180626/DJk2i4fhm9.png?imageslim" alt="mark"></p>
+<p>将状态视为图中的节点，将事件视为这些节点之间的边界。</p>
+<p>一个类可以通过向其方法添加注解来监视组件的生命周期状态。<br>然后，您可以通过调用Lifecycle类的<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle#addObserver%28android.arch.lifecycle.LifecycleObserver%29" target="_blank" rel="noopener">addObserver（）</a>方法并传递观察者的实例来添加观察者，如下例所示：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">public</span> <span class="selector-tag">class</span> <span class="selector-tag">MyObserver</span> <span class="selector-tag">implements</span> <span class="selector-tag">LifecycleObserver</span> &#123;</span><br><span class="line">    <span class="variable">@OnLifecycleEvent</span>(Lifecycle.Event.ON_RESUME)</span><br><span class="line">    public void connectListener() &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">@OnLifecycleEvent</span>(Lifecycle.Event.ON_PAUSE)</span><br><span class="line">    public void disconnectListener() &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">myLifecycleOwner</span><span class="selector-class">.getLifecycle</span>()<span class="selector-class">.addObserver</span>(new MyObserver());</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，myLifecycleOwner对象实现了<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner" target="_blank" rel="noopener">LifecycleOwner</a>接口，这将在下一节中介绍。</p>
+<h3 id="LifecycleOwner"><a href="#LifecycleOwner" class="headerlink" title="LifecycleOwner"></a>LifecycleOwner</h3><p><a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner" target="_blank" rel="noopener">LifecycleOwner</a>是一个单一的方法接口，表示该类有一个<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle" target="_blank" rel="noopener">Lifecycle</a>。<br>它有一个方法<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner#getLifecycle%28%29" target="_blank" rel="noopener">getLifecycle（）</a>，它必须由class实现。<br>如果您试图管理整个应用程序进程的生命周期，请参阅<a href="https://developer.android.com/reference/android/arch/lifecycle/ProcessLifecycleOwner" target="_blank" rel="noopener">ProcessLifecycleOwner</a>。</p>
+<p>该接口从各个类（如Fragment和AppCompatActivity）抽象生命周期的所有权，并允许编写与它们一起工作的组件。<br>任何自定义应用程序类都可以实现LifecycleOwner接口</p>
+<p>实现<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleObserver" target="_blank" rel="noopener">LifecycleObserver</a>的组件可以与实现<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner" target="_blank" rel="noopener">LifecycleOwner</a>的组件无缝协作，因为所有者可以提供生命周期，观察者可以注册观察。</p>
+<p>对于位置跟踪示例，我们可以使MyLocationListener类实现LifecycleObserver，然后使用onCreate()方法中的活动生命周期对其进行初始化。<br>这允许MyLocationListener类是自给自足的，这意味着对生命周期状态变化作出反应的逻辑在MyLocationListener中声明，而不是在活动中声明。<br>让各个组件存储自己的逻辑使得活动和片段逻辑更容易管理。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">MyLocationListener</span> myLocationListener;</span><br><span class="line"></span><br><span class="line">    public void onCreate(...) &#123;</span><br><span class="line">        myLocationListener = <span class="keyword">new</span> <span class="type">MyLocationListener</span>(<span class="keyword">this</span>, getLifecycle(), location -&gt; &#123;</span><br><span class="line">            <span class="comment">// update UI</span></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="type">Util</span>.checkUserStatus(result -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (result) &#123;</span><br><span class="line">                myLocationListener.enable();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个常见的用例就是避免在生命周期状处于不好的状态时调用某些回调。<br>例如，如果回调在保存活动状态后运行fragment事务，则会触发崩溃，因此我们绝不希望调用该回调。</p>
+<p>为了简化这个用例，生命周期类允许其他对象查询当前状态。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLocationListener</span> <span class="keyword">implements</span> <span class="title">LifecycleObserver</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> enabled = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyLocationListener</span><span class="params">(Context context, Lifecycle lifecycle, Callback callback)</span> </span>&#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OnLifecycleEvent</span>(Lifecycle.Event.ON_START)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enabled) &#123;</span><br><span class="line">           <span class="comment">// connect</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        enabled = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (lifecycle.getCurrentState().isAtLeast(STARTED)) &#123;</span><br><span class="line">            <span class="comment">// connect if not connected</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OnLifecycleEvent</span>(Lifecycle.Event.ON_STOP)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// disconnect if connected</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这个实现，我们的LocationListener类完全是生命周期感知的。<br>如果我们需要使用来自其他Activity或Fragment的LocationListener，我们只需要初始化它。<br>所有的启动和销毁操作都由该类本身进行管理。</p>
+<p>如果Library提供需要与Android生命周期配合使用的类，我们建议您使用支持生命周期的组件。<br>您的Library客户端可以在客户端无需手动生命周期管理即可轻松集成这些组件。</p>
+<h4 id="实施自定义LifecycleOwner"><a href="#实施自定义LifecycleOwner" class="headerlink" title="实施自定义LifecycleOwner"></a>实施自定义LifecycleOwner</h4><p><strong>Support Library 26.1.0中的Fragment和Activity以及更高版本已经实现LifecycleOwner接口。</strong></p>
+<p>如果您想要创建LifecycleOwner的自定义类，则可以使用<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleRegistry" target="_blank" rel="noopener">LifecycleRegistry</a>类，但需要将事件转发到该类中，如以下代码示例所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">LifecycleOwner</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> LifecycleRegistry mLifecycleRegistry;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">        mLifecycleRegistry = <span class="keyword">new</span> LifecycleRegistry(<span class="keyword">this</span>);</span><br><span class="line">        mLifecycleRegistry.markState(Lifecycle.State.CREATED);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onStart();</span><br><span class="line">        mLifecycleRegistry.markState(Lifecycle.State.STARTED);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NonNull</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Lifecycle <span class="title">getLifecycle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mLifecycleRegistry;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="生命周期感知组件的最佳实践"><a href="#生命周期感知组件的最佳实践" class="headerlink" title="生命周期感知组件的最佳实践"></a>生命周期感知组件的最佳实践</h3><ul>
+<li>尽可能保持您的UI控制器（Activities和Fragments）尽可能精简。他们不应该试图获取他们自己的数据;相反，使用<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>来做到这一点，并观察一个<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData" target="_blank" rel="noopener">LiveData</a>对象来反映更改回视图。</li>
+<li>尝试编写数据驱动UI的界面，其中您的UI控制器的职责是在数据更改时更新视图，或将用户操作通知给<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>。</li>
+<li>把你的数据逻辑放在<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>类中。<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>应作为您的UI控制器和其他应用程序之间的连接器。但要小心，<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>不负责提取数据（例如，来自网络）。相反，<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>应调用相应的组件来获取数据，然后将结果提供给UI控制器。</li>
+<li>使用<a href="https://developer.android.com/topic/libraries/data-binding/" target="_blank" rel="noopener">Data Binding</a>在视图和UI控制器之间保持干净的界面。这使您可以使您的视图更具说明性，并最大限度地减少需要在活动和片段中编写的更新代码。如果你喜欢用Java编程语言来做到这一点，可以使用像Butter Knife这样的库来避免样板代码并且有更好的抽象</li>
+<li>如果您的UI很复杂，请考虑创建一个presenter类来处理UI修改。这可能是一项艰巨的任务，但它可以使您的UI组件更易于测试。</li>
+<li>避免在<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>中引用View或Activity上下文。如果<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel" target="_blank" rel="noopener">ViewModel</a>超出活动（在配置更改的情况下），则活动会泄漏并且垃圾收集器无法正确处理。</li>
+</ul>
+<h3 id="支持生命周期感知组件的用例"><a href="#支持生命周期感知组件的用例" class="headerlink" title="支持生命周期感知组件的用例"></a>支持生命周期感知组件的用例</h3><p>支持生命周期的组件可以让您在各种情况下更容易地管理生命周期。<br>一些例子是：</p>
+<ul>
+<li>在粗粒度和细粒度 位置更新之间切换。使用生命周期感知组件在位置应用可见时启用细粒度位置更新，并在应用处于后台时切换到粗粒度更新。LiveData是一种生命周期感知型组件，允许您的应用在用户更改位置时自动更新用户界面。</li>
+<li>停止并开始视频缓冲。尽可能使用支持生命周期的组件来启动视频缓冲，但延迟播放直到应用程序完全启动。您还可以使用生命周期感知组件在应用程序销毁时终止缓冲。</li>
+<li>启动和停止网络连接。使用支持生命周期的组件可以在应用程序处于前台时实时更新（流式传输）网络数据，并在应用程序进入后台时自动暂停。</li>
+<li>暂停和恢复动画可绘制。使用生命周期感知组件处理在应用程序处于后台时暂停动画的可绘制画面，并在应用程序处于前景时恢复可绘制画面。</li>
+</ul>
+<h3 id="处理停止事件"><a href="#处理停止事件" class="headerlink" title="处理停止事件"></a>处理停止事件</h3><p>当Lifecycle属于AppCompatActivity或Fragment时，Lifecycle的状态将更改为<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State#CREATED" target="_blank" rel="noopener">CREATED</a>，并在调用AppCompatActivity或Fragment的onSaveInstanceState()时调度<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.Event#ON_STOP" target="_blank" rel="noopener">ON_STOP</a>事件。</p>
+<p>当Fragment或AppCompatActivity的状态通过onSaveInstanceState（）保存时，UI被认为是不可变的，直到<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.Event#ON_START" target="_blank" rel="noopener">ON_START</a>被调用。尝试在保存状态后修改UI界面可能会导致应用程序的导航状态不一致，这就是为什么如果应用程序在状态保存后运行FragmentTransaction时FragmentManager会抛出异常。<br>有关详细信息，详情请参阅 <a href="https://developer.android.com/reference/android/support/v4/app/FragmentTransaction#commit%28%29" target="_blank" rel="noopener">commit()</a>。</p>
+<p>如果观察者的关联Lifecycle在<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State#STARTED" target="_blank" rel="noopener">STARTED</a>之前，则<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData" target="_blank" rel="noopener">LiveData</a>通过避免调用其观察者来防止这种边缘情况出现。<br>在幕后，它决定调用观察者之前调用<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State#isAtLeast%28android.arch.lifecycle.Lifecycle.State%29" target="_blank" rel="noopener">isAtLeast()</a>。</p>
+<p>不幸的是，AppCompatActivity的onStop()方法会在onSaveInstanceState()之后调用，这会在不允许UI状态更改但生命周期尚未移至<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State#CREATED" target="_blank" rel="noopener">CREATED</a>状态的情况下留下空隙。</p>
+<p>为了防止出现这个问题，beta2版本中的Lifecycle类将lower状态标记为CREATED而不分派事件，即使事件直到<a href="https://developer.android.com/reference/android/support/v7/app/AppCompatActivity.html#onStop%28%29" target="_blank" rel="noopener">onStop()</a>被调用也未被分派，任何检查当前状态的代码也都会获得真实值。</p>
+<p>不幸的是，这个解决方案有两个主要问题：</p>
+<ul>
+<li>在API等级23或更低的情况下，Android系统实际上保存活动的状态，即使它被另一活动部分覆盖。换句话说，Android系统调用onSaveInstanceState()，但不一定调用onStop()。这会创建一个潜在的长时间间隔，即使其UI状态无​​法修改，观察者仍认为生命周期处于活动状态。</li>
+<li>任何想要向LiveData类公开类似行为的类都必须实现Lifecycle beta2和更低版本提供的解决方法</li>
+</ul>
+<p><strong>注意：为了使此流程更简单，并提供与旧版本的更好兼容性，从版本1.0.0-rc1开始，在调用onSaveInstanceState()而无需等待对onStop()的调用时，将Lifecycle对象标记为CREATED，并调度onStop()方法。这不太可能影响您的代码，但您需要注意这一点，因为它与API级别26及更低级别的Activity类中的调用顺序不匹配。</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/26/dart/Dart语言之旅/" rel="next" title="Dart语言之旅">
+                <i class="fa fa-chevron-left"></i> Dart语言之旅
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用生命周期感知组件处理生命周期"><span class="nav-number">1.</span> <span class="nav-text">使用生命周期感知组件处理生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lifecycle"><span class="nav-number">1.1.</span> <span class="nav-text">Lifecycle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Event"><span class="nav-number">1.1.1.</span> <span class="nav-text">Event</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#State"><span class="nav-number">1.1.2.</span> <span class="nav-text">State</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LifecycleOwner"><span class="nav-number">1.2.</span> <span class="nav-text">LifecycleOwner</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实施自定义LifecycleOwner"><span class="nav-number">1.2.1.</span> <span class="nav-text">实施自定义LifecycleOwner</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期感知组件的最佳实践"><span class="nav-number">1.3.</span> <span class="nav-text">生命周期感知组件的最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持生命周期感知组件的用例"><span class="nav-number">1.4.</span> <span class="nav-text">支持生命周期感知组件的用例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理停止事件"><span class="nav-number">1.5.</span> <span class="nav-text">处理停止事件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
