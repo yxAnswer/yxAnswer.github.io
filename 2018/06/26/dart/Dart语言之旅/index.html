@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="技术成长之路">
 <meta property="og:description" content="本页向您展示了如何使用每个主要的Dart特性，从变量和运算符到类和库，假定您已经知道如何用另一种语言编程。要了解有关Dart核心库的更多信息，请参阅Dart  Library之旅。无论何时您想了解有关语言功能的更多详细信息，请参阅Dart语言规范。  Dart基础特性一个基本的dart程序 以下代码使用了Dart最基本的许多功能: 12345678910// 定义一个函数.printIntege">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-26T05:19:36.199Z">
+<meta property="og:updated_time" content="2018-06-26T05:28:38.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dart语言之旅">
 <meta name="twitter:description" content="本页向您展示了如何使用每个主要的Dart特性，从变量和运算符到类和库，假定您已经知道如何用另一种语言编程。要了解有关Dart核心库的更多信息，请参阅Dart  Library之旅。无论何时您想了解有关语言功能的更多详细信息，请参阅Dart语言规范。  Dart基础特性一个基本的dart程序 以下代码使用了Dart最基本的许多功能: 12345678910// 定义一个函数.printIntege">
@@ -388,7 +388,108 @@
 <li>有时候，重要的是某件事是一种<strong>表达式</strong>还是一种 <strong>声明</strong>，所以这两个词的确切含义很有帮助。</li>
 <li>Dart工具可以报告两种问题：warnings 和errors。警告只是表明您的代码可能无法正常工作，但它们不会阻止您的程序执行。错误可以是编译时或运行时。编译时错误导致代码无法执行; 运行时错误导致 代码执行时引发异常。</li>
 </ul>
-<h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h3><p>下表列出了Dart语言特别处理的关键词。<br>| abstract    | do           | import      | super     |<br>| ———– | :———– | ———– | ——— |<br>| abstract1   | do           | import 1    | super     |<br>| as 1        | dynamic 1    | in          | switch    |<br>| assert      | else         | interface 1 | sync<em> 2   |<br>| async 2     | enum         | is          | this      |<br>| async</em> 2    | export 1     | library 1   | throw     |<br>| await 2     | external 1   | mixin 1     | true      |<br>| break       | extends      | new         | try       |<br>| case        | factory 1    | null        | typedef 1 |<br>| catch       | false        | operator 1  | var       |<br>| class       | final        | part 1      | void      |<br>| const       | finally      | rethrow     | while     |<br>| continue    | for          | return      | with      |<br>| covariant 1 | get 1        | set 1       | yield 2   |<br>| default     | if           | static 1    | yield* 2  |<br>| deferred 1  | implements 1 |             |           |</p>
+<h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h3><p>下表列出了Dart语言特别处理的关键词。</p>
+<table>
+<thead>
+<tr>
+<th>abstract</th>
+<th style="text-align:left">do</th>
+<th>import</th>
+<th>super</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abstract1</td>
+<td style="text-align:left">do</td>
+<td>import 1</td>
+<td>super</td>
+</tr>
+<tr>
+<td>as 1</td>
+<td style="text-align:left">dynamic 1</td>
+<td>in</td>
+<td>switch</td>
+</tr>
+<tr>
+<td>assert</td>
+<td style="text-align:left">else</td>
+<td>interface 1</td>
+<td>sync* 2</td>
+</tr>
+<tr>
+<td>async 2</td>
+<td style="text-align:left">enum</td>
+<td>is</td>
+<td>this</td>
+</tr>
+<tr>
+<td>async* 2</td>
+<td style="text-align:left">export 1</td>
+<td>library 1</td>
+<td>throw</td>
+</tr>
+<tr>
+<td>await 2</td>
+<td style="text-align:left">external 1</td>
+<td>mixin 1</td>
+<td>true</td>
+</tr>
+<tr>
+<td>break</td>
+<td style="text-align:left">extends</td>
+<td>new</td>
+<td>try</td>
+</tr>
+<tr>
+<td>case</td>
+<td style="text-align:left">factory 1</td>
+<td>null</td>
+<td>typedef 1</td>
+</tr>
+<tr>
+<td>catch</td>
+<td style="text-align:left">false</td>
+<td>operator 1</td>
+<td>var</td>
+</tr>
+<tr>
+<td>class</td>
+<td style="text-align:left">final</td>
+<td>part 1</td>
+<td>void</td>
+</tr>
+<tr>
+<td>const</td>
+<td style="text-align:left">finally</td>
+<td>rethrow</td>
+<td>while</td>
+</tr>
+<tr>
+<td>continue</td>
+<td style="text-align:left">for</td>
+<td>return</td>
+<td>with</td>
+</tr>
+<tr>
+<td>covariant 1</td>
+<td style="text-align:left">get 1</td>
+<td>set 1</td>
+<td>yield 2</td>
+</tr>
+<tr>
+<td>default</td>
+<td style="text-align:left">if</td>
+<td>static 1</td>
+<td>yield* 2</td>
+</tr>
+<tr>
+<td>deferred 1</td>
+<td style="text-align:left">implements1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>1<strong>带上标1</strong>的单词是内置标识符。<br>避免使用内置标识符作为标识符。<br>如果您尝试为类或类型名称使用内置标识符，则会发生编译时错误。<br>2<strong>带上标2</strong>的单词是较新的，与Dart 1.0版本发布后添加的异步支持相关的有限保留字。<br>您不能使用async，await或yield作为用async，async <em>或sync </em>标记的任何函数体中的标识符。<br>有关更多信息，请参见<a href="https://www.dartlang.org/guides/language/language-tour#asynchrony-support" target="_blank" rel="noopener">异步支持</a></p>
 <p><strong>关键字表中的所有其他字都是保留字。</strong><br>您不能使用保留字作为标识符**</p>
 <h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>以下是创建变量并初始化变量的示例：</p>
