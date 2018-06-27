@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="LiveData概述LiveData是一个可观察的数据持有者类。与常规可观察性不同，LiveData具有生命周期感知能力，这意味着它尊重其他应用程序组件（例如活动，片段或服务）的生命周期。这种感知确保LiveData只更新处于活动生命周期状态的应用程序组件观察者。注意：要将LiveData组件导入到Android项目中，请参阅向项目添加组件。如果观察者的生命周期处于STARTED或RESUMED状">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android架构组件官方文档02——LiveData">
+<meta property="og:url" content="http://yoursite.com/2018/06/27/android/Android架构组件官方文档02——LiveData/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="LiveData概述LiveData是一个可观察的数据持有者类。与常规可观察性不同，LiveData具有生命周期感知能力，这意味着它尊重其他应用程序组件（例如活动，片段或服务）的生命周期。这种感知确保LiveData只更新处于活动生命周期状态的应用程序组件观察者。注意：要将LiveData组件导入到Android项目中，请参阅向项目添加组件。如果观察者的生命周期处于STARTED或RESUMED状">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-27T03:38:02.496Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android架构组件官方文档02——LiveData">
+<meta name="twitter:description" content="LiveData概述LiveData是一个可观察的数据持有者类。与常规可观察性不同，LiveData具有生命周期感知能力，这意味着它尊重其他应用程序组件（例如活动，片段或服务）的生命周期。这种感知确保LiveData只更新处于活动生命周期状态的应用程序组件观察者。注意：要将LiveData组件导入到Android项目中，请参阅向项目添加组件。如果观察者的生命周期处于STARTED或RESUMED状">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/27/android/Android架构组件官方文档02——LiveData/"/>
+
+
+
+
+
+  <title>Android架构组件官方文档02——LiveData | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/27/android/Android架构组件官方文档02——LiveData/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android架构组件官方文档02——LiveData</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-27T11:33:09+08:00">
+                2018-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="LiveData概述"><a href="#LiveData概述" class="headerlink" title="LiveData概述"></a>LiveData概述</h3><p><a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener">LiveData</a>是一个可观察的数据持有者类。<br>与常规可观察性不同，LiveData具有生命周期感知能力，这意味着它尊重其他应用程序组件（例如活动，片段或服务）的生命周期。<br>这种感知确保LiveData只更新处于活动生命周期状态的应用程序组件观察者。<br>注意：要将LiveData组件导入到Android项目中，请参阅向项目<a href="https://developer.android.com/topic/libraries/architecture/adding-components.html#lifecycle" target="_blank" rel="noopener">添加组件</a>。<br>如果观察者的生命周期处于<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#STARTED" target="_blank" rel="noopener">STARTED</a>或<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#RESUMED" target="_blank" rel="noopener">RESUMED</a>状态，则LiveData会将<a href="https://developer.android.com/reference/android/arch/lifecycle/Observer.html" target="_blank" rel="noopener">Observer</a>类表示的观察者视为活动状态。<br><a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener">LiveData</a>仅通知处于活跃状态的观察者更新。<br>未注册观看<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener">LiveData</a>对象的非活跃期的观察者不会收到有关更改的通知。</p>
+<p>您可以注册与实现LifecycleOwner接口的对象配对的观察者。此关系允许在相应生命周期对象的状态更改为DESTROYED时删除观察者。<br>这对于活动和片段尤其有用，因为它们可以安全地观察LiveData对象，而不必担心泄漏 - 在其生命周期被破坏时，活动和片段会立即取消订阅。</p>
+<p>有关如何使用LiveData的更多信息，请参阅使用LiveData对象</p>
+<h3 id="使用LiveData的优点"><a href="#使用LiveData的优点" class="headerlink" title="使用LiveData的优点"></a>使用LiveData的优点</h3><p>使用LiveData提供以下优点：<br><strong>确保您的UI界面符合您UI数据状态</strong></p>
+<blockquote>
+<p>LiveData遵循观察者模式。<br>当生命周期状态改变时，LiveData会通知Observer对象。<br>您可以合并代码以更新这些Observer对象中的UI。<br>每次应用程序数据更改时，您的观察者都可以在每次更改时更新UI，而不是每次更新UI。<br><strong>没有内存泄漏</strong><br>观察者绑定到<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.html" target="_blank" rel="noopener">Lifecycle</a>对象，并在其相关生命周期被破坏后自行清理。</p>
+</blockquote>
+<p><strong>不会因为活动停止而崩溃</strong></p>
+<blockquote>
+<p>如果观察者的生命周期处于非活动状态，例如在后退堆栈中的活动，则它不会收到任何LiveData事件。</p>
+</blockquote>
+<p><strong>没有更多的手动声明周期处理</strong><br>UI组件只是观察相关数据，不停止或恢复观察。<br>LiveData自动管理所有这些，因为它在观察时意识到相关的生命周期状态更改。<br><strong>始终保持最新的数据</strong><br>如果生命周期变为非活动状态，它将在再次变为活动状态时收到最新数据。例如，后台活动在返回到前台后立即收到最新数据。<br><strong>正确的配置更改</strong><br>如果由于配置更改（如设备旋转）而重新创建活动或片段，它会立即收到最新的可用数据。<br><strong>共享资源</strong><br>您可以使用单例模式扩展LiveData对象以包装系统服务，以便它们可以在应用程序中共享。<br>LiveData对象连接到系统服务一次，然后任何需要该资源的观察者都可以观看LiveData对象。<br>有关更多信息，请参阅扩展LiveData。</p>
+<h3 id="使用LiveData对象"><a href="#使用LiveData对象" class="headerlink" title="使用LiveData对象"></a>使用LiveData对象</h3><p>按照以下步骤操作LiveData对象：</p>
+<ol>
+<li>创建一个LiveData实例来保存某种类型的数据。这通常在您的<a href="https://developer.android.com/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>类中完成。</li>
+<li>创建一个<a href="https://developer.android.com/reference/android/arch/lifecycle/Observer.html" target="_blank" rel="noopener">Observer</a>对象，该对象定义<a href="https://developer.android.com/reference/android/arch/lifecycle/Observer.html#onChanged%28T%29" target="_blank" rel="noopener">onChanged</a>()方法，该方法控制LiveData对象保存的数据更改时发生的情况。您通常在UI控制器中创建Observer对象，如活动或片段。</li>
+<li>使用observe()方法将Observer对象附加到LiveData对象。observe()方法使用<a href="https://developer.android.com/reference/android/arch/lifecycle/LifecycleOwner.html" target="_blank" rel="noopener">LifecycleOwner</a>对象。这将Observer对象订阅到LiveData对象，以便通知其更改。您通常将Observer对象附加到UI控制器中，例如Activity或Fragment。</li>
+</ol>
+<blockquote>
+<p><strong>注意：您可以使用<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html#observeForever%28android.arch.lifecycle.Observer%3CT%3E%29" target="_blank" rel="noopener">observeForever（Observer）</a>方法注册一个没有关联的LifecycleOwner对象的观察器。在这种情况下，观察者被认为始终处于活动状态，因此总是通知修改。您可以删除这些观察者调用<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html#removeObserver%28android.arch.lifecycle.Observer%3CT%3E%29" target="_blank" rel="noopener">removeObserver（Observer）</a>方法。</strong></p>
+</blockquote>
+<p>当您更新存储在LiveData对象中的值时，只要附加的LifecycleOwner处于活动状态，它就会触发所有已注册的观察者。<br>LiveData允许UI控制器观察者订阅更新。当LiveData对象持有的数据更改时，UI会自动更新以作为响应。</p>
+<h4 id="创建LiveData对象"><a href="#创建LiveData对象" class="headerlink" title="创建LiveData对象"></a>创建LiveData对象</h4><p>LiveData是一个可用于任何数据的包装器，包括实现集合的对象（如List）。LiveData对象通常存储在ViewModel对象中，并通过getter方法访问，如以下示例所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">NameViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Create a LiveData with a String</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">MutableLiveData</span>&lt;<span class="type">String</span>&gt; mCurrentName;</span><br><span class="line"></span><br><span class="line">    public <span class="type">MutableLiveData</span>&lt;<span class="type">String</span>&gt; getCurrentName() &#123;</span><br><span class="line">        <span class="keyword">if</span> (mCurrentName == <span class="literal">null</span>) &#123;</span><br><span class="line">            mCurrentName = <span class="keyword">new</span> <span class="type">MutableLiveData</span>&lt;<span class="type">String</span>&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mCurrentName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Rest of the ViewModel...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最初，LiveData对象中的数据未设置。</p>
+<blockquote>
+<p>注意：由于以下原因，请确保存储更新<strong>ViewModel</strong>对象中的UI的<strong>LiveData</strong>对象，而不是活动或片段：</p>
+<ul>
+<li>避免臃肿的活动和碎片。现在这些UI控制器负责显示数据但不保存数据状态。</li>
+<li>将<strong>LiveData</strong>实例与特定活动或片段实例分离，并允许<strong>LiveData</strong>对象保留配置更改。</li>
+</ul>
+</blockquote>
+<p>您可以在<strong><a href="https://developer.android.com/topic/libraries/architecture/viewmodel.html" target="_blank" rel="noopener">ViewModel指南</a></strong>中了解更多关于ViewModel类的好处和用法。</p>
+<h4 id="观察LiveData对象"><a href="#观察LiveData对象" class="headerlink" title="观察LiveData对象"></a>观察LiveData对象</h4><p>在大多数情况下，出于以下原因，应用程序组件的onCreate()方法是开始观察LiveData对象的正确位置：</p>
+<ol>
+<li>确保系统不会从Activity或fragment的onResume（）方法进行多余的调用。</li>
+<li>确保Activity或Fragment<strong>具有</strong>一旦它变为活动状态即可显示的<strong>数据</strong>。只要应用程序组件处于<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#STARTED" target="_blank" rel="noopener">STARTED</a>状态，它就会从它所观察的LiveData对象中接收最新的值。这只会在设置要观察的LiveData对象时才会发生。</li>
+</ol>
+<p>通常，LiveData仅在数据更改时传递更新，并且仅传递给活动观察者。此行为的一个例外是，观察者在从非活动状态变为活动状态时也会收到更新。此外，如果观察者第二次从非激活状态变为激活状态，则只有在自上一次变为活动状态以来该值发生变化时才会收到更新。</p>
+<p>以下示例代码说明了如何开始观察LiveData对象：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">NameActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">NameViewModel</span> mModel;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Other code to setup the activity...</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Get the ViewModel.</span></span><br><span class="line">        mModel = <span class="type">ViewModelProviders</span>.of(<span class="keyword">this</span>).get(<span class="type">NameViewModel</span>.<span class="keyword">class</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Create the observer which updates the UI.</span></span><br><span class="line">        <span class="keyword">final</span> <span class="type">Observer</span>&lt;<span class="type">String</span>&gt; nameObserver = <span class="keyword">new</span> <span class="type">Observer</span>&lt;<span class="type">String</span>&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            public void onChanged(<span class="meta">@Nullable</span> <span class="keyword">final</span> <span class="type">String</span> newName) &#123;</span><br><span class="line">                <span class="comment">// Update the UI, in this case, a TextView.</span></span><br><span class="line">                mNameTextView.setText(newName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.</span></span><br><span class="line">        mModel.getCurrentName().observe(<span class="keyword">this</span>, nameObserver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用nameObserver作为参数传递<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html#observe%28android.arch.lifecycle.LifecycleOwner,android.arch.lifecycle.Observer%3CT%3E%29" target="_blank" rel="noopener">observe()</a>后，立即调用<a href="https://developer.android.com/reference/android/arch/lifecycle/Observer.html#onChanged%28T%29" target="_blank" rel="noopener">onChanged()</a>，以提供存储在mCurrentName中的最新值。如果LiveData对象未在mCurrentName中设置值，则不调用onChanged()。</p>
+<h4 id="更新LiveData对象"><a href="#更新LiveData对象" class="headerlink" title="更新LiveData对象"></a>更新LiveData对象</h4><p>LiveData没有公开可用的方法来更新存储的数据。<a href="https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData.html" target="_blank" rel="noopener">MutableLiveData</a>类公开公开<a href="https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData.html#setValue%28T%29" target="_blank" rel="noopener">setValue(T)</a>和<a href="https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData.html#postValue%28T%29" target="_blank" rel="noopener">postValue(T)</a>方法，如果需要编辑存储在LiveData对象中的值，则必须使用这些方法。通常在ViewModel中使用MutableLiveData，然后ViewModel只向观察者公开不可变的LiveData对象。<br>在建立观察者关系后，可以更新LiveData对象的值，如以下示例所示，当用户点击按钮时触发所有观察者：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mButton.setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        String anotherName = <span class="string">"John Doe"</span>;</span><br><span class="line">        mModel.getCurrentName().setValue(anotherName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在示例中调用setValue（T）会导致观察者用值John Doe调用它们的onChanged（）方法。该示例显示按钮按下，但setValue（）或postValue（）可能因多种原因被调用来更新mName，包括响应网络请求或数据库加载完成;在所有情况下，调用setValue（）或postValue（）都会触发观察者并更新UI。</p>
+<blockquote>
+<p>注意：您必须调用setValue（T）方法来更新主线程中的LiveData对象。如果代码在工作线程中执行，则可以使用postValue（T）方法更新LiveData对象。</p>
+</blockquote>
+<h4 id="与Room一起使用LiveData"><a href="#与Room一起使用LiveData" class="headerlink" title="与Room一起使用LiveData"></a>与Room一起使用LiveData</h4><p><a href="https://developer.android.com/training/data-storage/room/index.html" target="_blank" rel="noopener">Room</a>持久性库支持返回<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener">LiveData</a>对象的可观察查询。可观察查询是作为数据库访问对象（DAO）的一部分写入的。</p>
+<p>当更新数据库时，会生成所有必要的代码以更新LiveData对象。生成的代码在需要时在后台线程上异步运行查询。这种模式对于保持UI中显示的数据与存储在数据库中的数据保持同步很有用。您可以在<a href="https://developer.android.com/topic/libraries/architecture/room.html" target="_blank" rel="noopener">Room持久库指南</a>中阅读关于Room和DAO的更多信息。</p>
+<h3 id="扩展LiveData"><a href="#扩展LiveData" class="headerlink" title="扩展LiveData"></a>扩展LiveData</h3><p>如果观察者的生命周期处于<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#STARTED" target="_blank" rel="noopener">STARTED</a>或<a href="https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#RESUMED" target="_blank" rel="noopener">RESUMED</a>状态，则<strong>LiveData</strong>将认为观察者处于活动状态。以下示例代码说明了如何扩展<strong>LiveData</strong>类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StockLiveData</span> <span class="keyword">extends</span> <span class="title">LiveData</span>&lt;<span class="title">BigDecimal</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> StockManager mStockManager;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SimplePriceListener mListener = <span class="keyword">new</span> SimplePriceListener() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPriceChanged</span><span class="params">(BigDecimal price)</span> </span>&#123;</span><br><span class="line">            setValue(price);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StockLiveData</span><span class="params">(String symbol)</span> </span>&#123;</span><br><span class="line">        mStockManager = <span class="keyword">new</span> StockManager(symbol);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mStockManager.requestPriceUpdates(mListener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onInactive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mStockManager.removeUpdates(mListener);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本示例中的价格监听器的实现包括以下重要方法：</p>
+<ul>
+<li><p>当LiveData对象具有处于活跃期的观察者时，将调用<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html#onActive%28%29" target="_blank" rel="noopener">onActive（）</a>方法。这意味着您需要开始观察此方法的价格更新。</p>
+</li>
+<li><p>当LiveData对象没有任何active期间的观察者时，将调用<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html#onInactive%28%29" target="_blank" rel="noopener">onInactive（）</a>方法。由于没有观察员在监听，因此没有理由保持连接到StockManager服务。</p>
+</li>
+<li><a href="https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData.html#setValue%28T%29" target="_blank" rel="noopener">setValue（T）</a>方法更新LiveData实例的值并通知任何活跃的观察者有关更改。</li>
+</ul>
+<p>您可以使用StockLiveData类如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void onActivityCreated(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</span><br><span class="line">        <span class="type">LiveData</span>&lt;<span class="type">BigDecimal</span>&gt; myPriceListener = ...;</span><br><span class="line">        myPriceListener.observe(<span class="keyword">this</span>, price -&gt; &#123;</span><br><span class="line">            <span class="comment">// Update the UI.</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>observe（）方法将把实现了LifecycleOwner实例的Fragment作为第一个参数传递。这样做表示此观察者被绑定到与所有者关联的生命周期对象，这意味着：</p>
+<ul>
+<li>如果生命周期对象不处于活跃状态，则即使值发生更改，也不会调用观察者。</li>
+<li>生命周期对象被销毁后，观察者被自动删除。t<br>LiveData对象支持生命周期意味着您可以在多个Activity，Fragment和Service之间共享它们。为了保持示例简单，您可以按如下方式将LiveData类实现为单例：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StockLiveData</span> <span class="keyword">extends</span> <span class="title">LiveData</span>&lt;<span class="title">BigDecimal</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> StockLiveData sInstance;</span><br><span class="line">    <span class="keyword">private</span> StockManager mStockManager;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SimplePriceListener mListener = <span class="keyword">new</span> SimplePriceListener() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPriceChanged</span><span class="params">(BigDecimal price)</span> </span>&#123;</span><br><span class="line">            setValue(price);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MainThread</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> StockLiveData <span class="title">get</span><span class="params">(String symbol)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            sInstance = <span class="keyword">new</span> StockLiveData(symbol);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sInstance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">StockLiveData</span><span class="params">(String symbol)</span> </span>&#123;</span><br><span class="line">        mStockManager = <span class="keyword">new</span> StockManager(symbol);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mStockManager.requestPriceUpdates(mListener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onInactive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mStockManager.removeUpdates(mListener);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>您可以再Fragment中使用它，如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void onActivityCreated(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="type">StockLiveData</span>.get(getActivity()).observe(<span class="keyword">this</span>, price -&gt; &#123;</span><br><span class="line">            <span class="comment">// Update the UI.</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多个Fragment和Activity可以观察MyPriceListener实例。如果LiveData只有一个或多个可见并处于活动状态，则LiveData仅连接到系统服务。</p>
+<h3 id="转换LiveData"><a href="#转换LiveData" class="headerlink" title="转换LiveData"></a>转换LiveData</h3><p>您可能希望在LiveData更改为观察者之前更改存储在LiveData对象中的，或者您可能需要基于另一个LiveData实例的值返回不同的LiveData实例。Lifecycle软件包提供Transformations类，其中包括支持这些场景的帮助方法。<br><strong><a href="https://developer.android.com/reference/android/arch/lifecycle/Transformations.html#map%28android.arch.lifecycle.LiveData%3CX%3E,%20android.arch.core.util.Function%3CX,%20Y%3E%29" target="_blank" rel="noopener">Transformations.map()</a></strong><br>在存储在LiveData对象中的值上使用函数，并向下游传播结果。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LiveData&lt;User&gt; userLiveData = <span class="built_in">..</span>.;</span><br><span class="line">LiveData&lt;String&gt; userName = Transformations.map(userLiveData,<span class="built_in"> user </span>-&gt; &#123;</span><br><span class="line">    user.name + <span class="string">" "</span> + user.lastName</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong><a href="https://developer.android.com/reference/android/arch/lifecycle/Transformations#switchMap%28android.arch.lifecycle.LiveData%3CX%3E,%20android.arch.core.util.Function%3CX,%20android.arch.lifecycle.LiveData%3CY%3E%3E%29" target="_blank" rel="noopener">Transformations.switchMap()</a></strong></p>
+<p>与map（）类似，将函数应用于存储在LiveData对象中的值，并展开并向下游分派结果。传递给switchMap（）的函数必须返回一个LiveData对象，如下例所示：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private LiveData&lt;User&gt; getUser(String id) &#123;</span><br><span class="line">  <span class="built_in">..</span>.;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LiveData&lt;String&gt; userId = <span class="built_in">..</span>.;</span><br><span class="line">LiveData&lt;User&gt;<span class="built_in"> user </span>= Transformations.switchMap(userId, id -&gt; getUser(id) );</span><br></pre></td></tr></table></figure>
+<p>您可以使用转换方法在观察者的生命周期中传递信息。除非观察者正在观察返回的LiveData对象，否则不会计算转换。由于转换是懒加载的，因此与生命周期相关的行为会隐式传递，而不需要额外的显式调用或依赖关系。</p>
+<p>如果您认为您需要ViewModel对象中的Lifecycle对象，则转换可能是更好的解决方案。例如，假设您有一个接受地址并返回该地址的邮政编码的UI组件。您可以为此组件实现native的ViewModel，如以下示例代码所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">PostalCodeRepository</span> repository;</span><br><span class="line">    public <span class="type">MyViewModel</span>(<span class="type">PostalCodeRepository</span> repository) &#123;</span><br><span class="line">       <span class="keyword">this</span>.repository = repository;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">LiveData</span>&lt;<span class="type">String</span>&gt; getPostalCode(<span class="type">String</span> address) &#123;</span><br><span class="line">       <span class="comment">// DON'T DO THIS</span></span><br><span class="line">       <span class="keyword">return</span> repository.getPostCode(address);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这种情况下，postalCode是public的和fina的，因为该字段永远不会改变。postalCode字段定义为addressInput的转换，这意味着addressInput发生更改时将调用repository.getPostCode（）方法。如果存在活动观察者，那么这是真实的，如果在repository.getPostCode（）被调用时没有活跃的观察者，则在添加观察者之前不进行计算。</p>
+<p>该机制允许版本较低的应用程序创建按需延迟计算的LiveData对象。ViewModel对象可以轻松获得对LiveData对象的引用，然后在其上定义转换规则。</p>
+<h4 id="创建新的转换"><a href="#创建新的转换" class="headerlink" title="创建新的转换"></a>创建新的转换</h4><p>有十几种不同的特定转换可能在您的应用中很有用，但它们不是默认提供的。要实现自己的转换，您可以使用<a href="https://developer.android.com/reference/android/arch/lifecycle/MediatorLiveData.html" target="_blank" rel="noopener">MediatorLiveData</a>类，它监听其他<a href="https://developer.android.com/reference/android/arch/lifecycle/LiveData.html" target="_blank" rel="noopener">LiveData</a>对象并处理它们发出的事件。<strong>MediatorLiveData</strong>将其状态正确传播到源<strong>LiveData</strong>对象。要了解有关此模式的更多信息，请参阅<a href="https://developer.android.com/reference/android/arch/lifecycle/Transformations.html" target="_blank" rel="noopener">Transformations</a>类的参考文档。</p>
+<h3 id="合并多个LiveData源"><a href="#合并多个LiveData源" class="headerlink" title="合并多个LiveData源"></a>合并多个LiveData源</h3><p><a href="https://developer.android.com/reference/android/arch/lifecycle/MediatorLiveData.html" target="_blank" rel="noopener">MediatorLiveData</a>是<strong>LiveData</strong>的一个子类，允许您合并多个LiveData源。<strong>MediatorLiveData</strong>对象的观察者随后会在任何原始<strong>LiveData</strong>源对象更改时触发。</p>
+<p>例如，如果您的UI中有一个可从本地数据库或网络更新的LiveData对象，则可以将以下资源添加到MediatorLiveData对象：</p>
+<ul>
+<li>与存储在数据库中的数据关联的LiveData对象。</li>
+<li>与从网络访问的数据关联的LiveData对象。<br>您的活动只需观察<strong>MediatorLiveData</strong>对象即可从两个来源接收更新。有关详细示例，请参阅<a href="https://developer.android.com/topic/libraries/architecture/guide.html" target="_blank" rel="noopener">应用程序体系结构指南</a>的附录：<a href="https://developer.android.com/topic/libraries/architecture/guide.html#addendum" target="_blank" rel="noopener">展示网络状态部分</a>。<h3 id="其他资源"><a href="#其他资源" class="headerlink" title="其他资源"></a>其他资源</h3>有关在<a href="https://developer.android.com/training/snackbar" target="_blank" rel="noopener">Snackbar</a>消息，导航事件和其他事件中使用LiveData的其他信息，请<a href="https://medium.com/google-developers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150" target="_blank" rel="noopener">阅读此文章</a>。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/26/android/Android架构组件官方文档01——Lifecycle/" rel="next" title="Android架构组件官方文档01——Lifecycle">
+                <i class="fa fa-chevron-left"></i> Android架构组件官方文档01——Lifecycle
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#LiveData概述"><span class="nav-number">1.</span> <span class="nav-text">LiveData概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用LiveData的优点"><span class="nav-number">2.</span> <span class="nav-text">使用LiveData的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用LiveData对象"><span class="nav-number">3.</span> <span class="nav-text">使用LiveData对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建LiveData对象"><span class="nav-number">3.1.</span> <span class="nav-text">创建LiveData对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察LiveData对象"><span class="nav-number">3.2.</span> <span class="nav-text">观察LiveData对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新LiveData对象"><span class="nav-number">3.3.</span> <span class="nav-text">更新LiveData对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与Room一起使用LiveData"><span class="nav-number">3.4.</span> <span class="nav-text">与Room一起使用LiveData</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展LiveData"><span class="nav-number">4.</span> <span class="nav-text">扩展LiveData</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转换LiveData"><span class="nav-number">5.</span> <span class="nav-text">转换LiveData</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建新的转换"><span class="nav-number">5.1.</span> <span class="nav-text">创建新的转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并多个LiveData源"><span class="nav-number">6.</span> <span class="nav-text">合并多个LiveData源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他资源"><span class="nav-number">7.</span> <span class="nav-text">其他资源</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
