@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="ViewModel概述ViewModel类旨在以一种有生命周期意识的方式存储和管理与UI相关的数据。ViewModel类允许数据在配置变化（例如屏幕旋转）后存活。注意：要将ViewModel导入到Android项目中，请参阅向项目添加组件 Android framework管理UI控制器的生命周期，例如Activity和Fragment。framework可能会决定销毁或重新创建UI控制器，以响应">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android架构组件官方文档03——ViewModel">
+<meta property="og:url" content="http://yoursite.com/2018/07/02/android/Android架构组件官方文档03——ViewModel/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="ViewModel概述ViewModel类旨在以一种有生命周期意识的方式存储和管理与UI相关的数据。ViewModel类允许数据在配置变化（例如屏幕旋转）后存活。注意：要将ViewModel导入到Android项目中，请参阅向项目添加组件 Android framework管理UI控制器的生命周期，例如Activity和Fragment。framework可能会决定销毁或重新创建UI控制器，以响应">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180702/KjKH5m6E8m.png?imageslim">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180702/akE7BEdHC6.png?imageslim">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180702/aIAdcEJ71B.png?imageslim">
+<meta property="og:updated_time" content="2018-07-02T09:59:05.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android架构组件官方文档03——ViewModel">
+<meta name="twitter:description" content="ViewModel概述ViewModel类旨在以一种有生命周期意识的方式存储和管理与UI相关的数据。ViewModel类允许数据在配置变化（例如屏幕旋转）后存活。注意：要将ViewModel导入到Android项目中，请参阅向项目添加组件 Android framework管理UI控制器的生命周期，例如Activity和Fragment。framework可能会决定销毁或重新创建UI控制器，以响应">
+<meta name="twitter:image" content="http://oima95jt3.bkt.clouddn.com/blog/180702/KjKH5m6E8m.png?imageslim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/02/android/Android架构组件官方文档03——ViewModel/"/>
+
+
+
+
+
+  <title>Android架构组件官方文档03——ViewModel | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/android/Android架构组件官方文档03——ViewModel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android架构组件官方文档03——ViewModel</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T17:58:17+08:00">
+                2018-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="ViewModel概述"><a href="#ViewModel概述" class="headerlink" title="ViewModel概述"></a>ViewModel概述</h3><p><a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>类旨在以一种有生命周期意识的方式存储和管理与UI相关的数据。<br><a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>类允许数据在配置变化（例如屏幕旋转）后存活。<br><strong>注意：要将ViewModel导入到Android项目中，请参阅<a href="https://developer.android.google.cn/topic/libraries/architecture/adding-components.html#lifecycle" target="_blank" rel="noopener">向项目添加组件</a></strong></p>
+<p>Android framework管理UI控制器的生命周期，例如Activity和Fragment。<br>framework可能会决定销毁或重新创建UI控制器，以响应完全不受您控制的特定用户操作或设备事件。</p>
+<p>如果系统销毁或重新创建UI控制器，则存储在其中的任何临时UI相关的数据都将丢失。例如，您的应用可能包含其中一项活动中的用户列表。当为配置更改重新创建活动时，新活动必须重新获取用户列表。<br>对于简单的数据，Activity可以使用<a href="https://developer.android.google.cn/reference/android/app/Activity.html#onSaveInstanceState%28android.os.Bundle%29" target="_blank" rel="noopener">onSaveInstanceState()</a>方法并从<a href="https://developer.android.google.cn/reference/android/app/Activity.html#onCreate%28android.os.Bundle%29" target="_blank" rel="noopener">onCreate()</a>中的bundle中恢复其数据，但此方法仅适用于可以序列化然后反序列化的少量数据，可能不适合像用户或位图的列表这样的大量数据。</p>
+<p>另一个问题是UI控制器经常需要进行异步调用，这可能需要一些时间才能返回。UI控制器需要管理这些调用，并确保系统在销毁后清理它们以避免潜在的内存泄漏。这种管理需要大量的维护，并且在为配置更改而重新创建对象的情况下，由于对象可能不得不重新发出已经做出的请求，所以浪费资源。</p>
+<p>UI控制器（如Activity和Fragment）主要用于显示UI数据，对用户操作做出反应或处理操作系统通信（如权限请求）。如果要求UI控制器也负责从数据库或网络加载数据，就会使改类变得臃肿。为UI控制器分配过多的责任可能会导致一个类尝试单独处理应用程序的所有工作，而不是将工作委托给其他类。通过这种方式给UI控制器分配过多的责任也使测试变得更加困难。</p>
+<p>将视图数据所有权从UI控制器逻辑中分离出来更简单，更高效。</p>
+<h3 id="实现一个ViewModel"><a href="#实现一个ViewModel" class="headerlink" title="实现一个ViewModel"></a>实现一个ViewModel</h3><p>架构组件为UI控制器提供<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>助手类。<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>对象在配置更改期间会自动保留，以便它们保存的数据立即可用于下一个Activity或fragment实例。例如，如果您需要在应用中显示用户列表，请明确分配职责来获取数据并将用户列表保存到ViewModel，而不是Activity或fragment，如以下示例代码所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">MutableLiveData</span>&lt;<span class="type">List</span>&lt;<span class="type">User</span>&gt;&gt; users;</span><br><span class="line">    public <span class="type">LiveData</span>&lt;<span class="type">List</span>&lt;<span class="type">User</span>&gt;&gt; getUsers() &#123;</span><br><span class="line">        <span class="keyword">if</span> (users == <span class="literal">null</span>) &#123;</span><br><span class="line">            users = <span class="keyword">new</span> <span class="type">MutableLiveData</span>&lt;<span class="type">List</span>&lt;<span class="type">User</span>&gt;&gt;();</span><br><span class="line">            loadUsers();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> users;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> void loadUsers() &#123;</span><br><span class="line">        <span class="comment">// Do an asynchronous operation to fetch users.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后你可以从一个Activity中访问列表，如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    public void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="comment">// Create a ViewModel the first time the system calls an activity's onCreate() method.</span></span><br><span class="line">        <span class="comment">// Re-created activities receive the same MyViewModel instance created by the first activity.</span></span><br><span class="line"></span><br><span class="line">        <span class="type">MyViewModel</span> model = <span class="type">ViewModelProviders</span>.of(<span class="keyword">this</span>).get(<span class="type">MyViewModel</span>.<span class="keyword">class</span>);</span><br><span class="line">        model.getUsers().observe(<span class="keyword">this</span>, users -&gt; &#123;</span><br><span class="line">            <span class="comment">// update UI</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果Activity重新创建，它将接收由第一个Activity创建的相同的MyViewModel实例。当持有ViewModel的Activity finish后，框架将调用ViewModel对象的onCleared()方法，以便它可以清理资源。</p>
+<p><strong>警告：ViewModel绝不能引用视图，生命周期或可能持有对活动上下文的引用的任何类。</strong></p>
+<p><a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>对象被设计为脱离视图或LifecycleOwners的特定实例。这种设计还意味着您可以更轻松地编写测试来覆盖ViewModel，因为它不知道视图和生命周期对象。ViewModel对象可以包含LifecycleObservers，例如LiveData对象。但是，ViewModel对象绝不能观察对生命周期感知的可观察对象（如LiveData对象）的更改。如果ViewModel需要应用程序上下文（例如查找系统服务），那么它可以扩展AndroidViewModel类并具有构造函数，该构造函数在构造函数中接收Application，因为Application类扩展了Context。</p>
+<h3 id="ViewMode的生命周期"><a href="#ViewMode的生命周期" class="headerlink" title="ViewMode的生命周期"></a>ViewMode的生命周期</h3><p>ViewModel对象的范围是在获取ViewModel时传递给<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModelProvider.html" target="_blank" rel="noopener">ViewModelProvider</a>的生命周期。ViewModel保留在内存中，直到生命周期的范围永久消失：在一个Activity的情况下，finish()时，在一个Fragment的情况下，当它被detached(分离)时。</p>
+<p>图1说明了一个Activity在进行一次旋转然后finish后的各种生命周期状态。该图还显示了相关Activity生命周期旁边ViewModel的生命周期。这个特定的图表说明了一个Activity的状态。这些相同的基本状态同样适用于Fragment的生命周期。<br><img src="http://oima95jt3.bkt.clouddn.com/blog/180702/KjKH5m6E8m.png?imageslim" alt="mark"></p>
+<p>系统首次调用Activity对象的onCreate()方法时，通常会请求<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>。系统可能会在整个Activity的生命周期中多次调用onCreate()，例如当设备屏幕旋转时。<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>从第一次请求<a href="https://developer.android.google.cn/reference/android/arch/lifecycle/ViewModel.html" target="_blank" rel="noopener">ViewModel</a>直到Activity finished 和销毁时一直存在。</p>
+<h3 id="在片段之间共享数据"><a href="#在片段之间共享数据" class="headerlink" title="在片段之间共享数据"></a>在片段之间共享数据</h3><p>Activity中的两个或更多fragment需要彼此进行通信是很常见的。想象一下，主-从关系的F让给met的一种常见情况，其中有一个Fragment，用户从列表中选择一个项目，另一个fragment显示所选项目的内容。这种情况有些麻烦，因为这两个片段都需要定义一些接口描述，并且所有者Activity必须将两者绑定在一起。此外，这两个fragment必须处理其他fragment尚未创建或可见的场景。</p>
+<p>可以使用ViewModel对象解决这个常见的痛点。这些fragment可以使用其Activity范围共享ViewModel来处理此通信，如以下示例代码所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">SharedViewModel</span> <span class="keyword">extends</span> <span class="title">ViewModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">MutableLiveData</span>&lt;<span class="type">Item</span>&gt; selected = <span class="keyword">new</span> <span class="type">MutableLiveData</span>&lt;<span class="type">Item</span>&gt;();</span><br><span class="line"></span><br><span class="line">    public void select(<span class="type">Item</span> item) &#123;</span><br><span class="line">        selected.setValue(item);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public <span class="type">LiveData</span>&lt;<span class="type">Item</span>&gt; getSelected() &#123;</span><br><span class="line">        <span class="keyword">return</span> selected;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MasterFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">SharedViewModel</span> model;</span><br><span class="line">    public void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        model = <span class="type">ViewModelProviders</span>.of(getActivity()).get(<span class="type">SharedViewModel</span>.<span class="keyword">class</span>);</span><br><span class="line">        itemSelector.setOnClickListener(item -&gt; &#123;</span><br><span class="line">            model.select(item);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DetailFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">    public void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        <span class="type">SharedViewModel</span> model = <span class="type">ViewModelProviders</span>.of(getActivity()).get(<span class="type">SharedViewModel</span>.<span class="keyword">class</span>);</span><br><span class="line">        model.getSelected().observe(<span class="keyword">this</span>, item -&gt; &#123;</span><br><span class="line">           <span class="comment">// Update the UI.</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意，在获取ViewModelProvider时，这两个Fragment都使用getActivity()。因此，两个Fragment 都接收相同的SharedViewModel实例，该实例的范围限定为Activity。<br>这种方法具有以下优点：</p>
+<ul>
+<li><p>Activity不需要做任何事情，也不需要了解这种沟通。</p>
+</li>
+<li><p>除了SharedViewModel约定之外，fragment不需要彼此了解。如果其中一个fragment消失，另一个fragment继续照常工作。</p>
+</li>
+<li><p>每个片fragment都有其自己的生命周期，并且不受其他生命周期的影响。如果一个fragment替换另一个fragment，UI将继续工作而不会出现任何问题。</p>
+</li>
+</ul>
+<h3 id="用ViewModel替换Loaders"><a href="#用ViewModel替换Loaders" class="headerlink" title="用ViewModel替换Loaders"></a>用ViewModel替换Loaders</h3><p>像<a href="https://developer.android.google.cn/reference/android/content/CursorLoader.html" target="_blank" rel="noopener">CursorLoader</a>这样的Loader类经常用于保持应用程序UI中的数据与数据库同步。您可以使用ViewModel和其他几个类来替换Loaders。使用ViewModel将您的UI控制器与数据加载操作分开，这意味着您在类之间的强引用减少了。</p>
+<p>在使用loaders的一种常见方法中，应用程序可能使用CursorLoader来观察数据库的内容。当数据库中的值发生更改时，加载程序会自动触发重新加载数据并更新UI：<br><img src="http://oima95jt3.bkt.clouddn.com/blog/180702/akE7BEdHC6.png?imageslim" alt="mark"><br><strong>图2.使用加载器加载数据</strong></p>
+<p>ViewModel与Room和LiveData一起使用来替换Loaders。ViewModel可确保数据在设备配置更改后仍然存在。当数据库发生更改时，Room会通知您的LiveData，而LiveData则会用修改的数据更新您的UI。<br><img src="http://oima95jt3.bkt.clouddn.com/blog/180702/aIAdcEJ71B.png?imageslim" alt="mark"><br><strong>图3.使用ViewModel加载数据</strong></p>
+<p><a href="https://medium.com/google-developers/lifecycle-aware-data-loading-with-android-architecture-components-f95484159de4" target="_blank" rel="noopener">此博客文章</a>描述了如何将ViewModel与LiveData一起使用来替换<a href="https://developer.android.google.cn/reference/android/content/AsyncTaskLoader.html" target="_blank" rel="noopener">AsyncTaskLoader</a>。</p>
+<p>随着你的数据变得越来越复杂，你可能会选择一个单独的类来加载数据。ViewModel的目的是封装UI控制器的数据，以使数据不受配置更改的影响。有关如何跨配置更改加载，保留和管理数据的信息，请参阅<a href="https://developer.android.google.cn/topic/libraries/architecture/saving-states.html" target="_blank" rel="noopener">保存UI状态</a>。</p>
+<p><a href="https://developer.android.google.cn/topic/libraries/architecture/guide.html#fetching_data" target="_blank" rel="noopener">Android App Architecture指南</a>建议构建一个存储库类来处理这些功能。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/27/android/架构组件——Lifecycle详解/" rel="next" title="架构组件——Lifecycle详解">
+                <i class="fa fa-chevron-left"></i> 架构组件——Lifecycle详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewModel概述"><span class="nav-number">1.</span> <span class="nav-text">ViewModel概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个ViewModel"><span class="nav-number">2.</span> <span class="nav-text">实现一个ViewModel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ViewMode的生命周期"><span class="nav-number">3.</span> <span class="nav-text">ViewMode的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在片段之间共享数据"><span class="nav-number">4.</span> <span class="nav-text">在片段之间共享数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用ViewModel替换Loaders"><span class="nav-number">5.</span> <span class="nav-text">用ViewModel替换Loaders</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
