@@ -73,7 +73,7 @@
 
 
 
-  <meta name="keywords" content="android," />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -87,7 +87,7 @@
 
 
 <meta name="description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
-<meta name="keywords" content="android">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android运行时权限总结">
 <meta property="og:url" content="http://yoursite.com/2018/06/22/android/Android运行时权限总结/index.html">
@@ -95,7 +95,7 @@
 <meta property="og:description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/img/bVZBii">
-<meta property="og:updated_time" content="2018-06-22T03:50:52.271Z">
+<meta property="og:updated_time" content="2018-10-05T15:38:15.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android运行时权限总结">
 <meta name="twitter:description" content="###1、android6.0以后的危险权限介绍（注意：Android O  8.0对于权限更加严格，下面会说一下8.0）android6.0以后有些危险权限需要手动去授权，就有了运行时权限的处理。下面的表格就是危险权限组：    权限组名 权限名     CALENDAR  日历 READ_CALENDARWRITE_CALENDER   CAMERA      相机 CAMERA   CONT">
@@ -334,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -430,8 +430,7 @@
 //已经授权，执行操作代码
 }    
 </code></pre><p>   基本上调用checkSelfPermission()函数传入权限参数，返回的结果又两个：<br>如果是已授权的权限，该方法返回结果是 PackageManager.PERMISSION_GRANTED 常量为 0，<br>如果是未授权的权限，该方法返回结果是 PackageManager.PERMISSION_DENIED 常量为 -1。<br>这样就可以判断是否已经授权，来进行下一步的操作。</p>
-<p><strong>3、如果没有授权，需要申请权限</strong><br>    ActivityCompat.requestPermissions(thisActivity,<br>                new String[]{Manifest.permission.READ_CONTACTS},<br>                MY_PERMISSIONS_REQUEST_READ_CONTACTS);<br>  这是一个异步的方法，第一个参数是Context；第二个参数是需要申请的权限的字符串数组（这个是支持同时申请多个权限，系统会逐个询问是否授权）；第三个参数为请求码requestCode，主要用于回调的时候检测。</p>
-<p><strong>4、处理权限申请的回调结果</strong><br>重写Activity或者fragment的 onRequestPermissionsResul()方法<br>      //权限回调方法<br>    @Override<br>    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {<br>        super.onRequestPermissionsResult(requestCode, permissions, grantResults);</p>
+<p><strong>3、如果没有授权，需要申请权限</strong><br>​    ActivityCompat.requestPermissions(thisActivity,<br>​                new String[]{Manifest.permission.READ_CONTACTS},<br>​                MY_PERMISSIONS_REQUEST_READ_CONTACTS);<br>  这是一个异步的方法，第一个参数是Context；第二个参数是需要申请的权限的字符串数组（这个是支持同时申请多个权限，系统会逐个询问是否授权）；第三个参数为请求码requestCode，主要用于回调的时候检测。<br>​<br><strong>4、处理权限申请的回调结果</strong><br>重写Activity或者fragment的 onRequestPermissionsResul()方法<br>​      //权限回调方法<br>​    @Override<br>​    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {<br>​        super.onRequestPermissionsResult(requestCode, permissions, grantResults);</p>
 <pre><code>    switch (requestCode){
 
         case 0:
@@ -463,24 +462,17 @@ if判断权限是否申请，没有申请，把它加到一个集合里面，把
 以后，去遍历这个集合，只要有一个没有申请的，就需、要去申请权限，   
  把这个集合转为数组，传到requestPermissions的第二个参数，然后就处理相应
  结果就可以了，遍历grantResults数组，判断是不是全部满足条件
-</code></pre><p>###3、EasyPermissions的使用<br>GitHub地址：<a href="https://github.com/googlesamples/easypermissions" target="_blank" rel="noopener">https://github.com/googlesamples/easypermissions</a><br>   EasyPermissions是谷歌封装的一个运行时权限申请的库，简化了操作的过程。<br>使用过程： 没有什么先后顺序，下面没有按这个顺序。这么做是可以的，当然还有其他的使用方法</p>
+</code></pre><p>​     </p>
+<p>###3、EasyPermissions的使用<br>GitHub地址：<a href="https://github.com/googlesamples/easypermissions" target="_blank" rel="noopener">https://github.com/googlesamples/easypermissions</a><br>   EasyPermissions是谷歌封装的一个运行时权限申请的库，简化了操作的过程。<br>使用过程： 没有什么先后顺序，下面没有按这个顺序。这么做是可以的，当然还有其他的使用方法</p>
 <blockquote>
 <p>1、builde gradle中依赖<br>2、清单文件中声明权限<br>3、重写onRequestPermissionsResult()方法，把执行操作给easyPermissions来<br>4、通过hasPermissions检查权限，或者原生的也行，然后去申请权限<br>5、实现EasyPermissions.PermissionCallbacks接口，重写两个方法，成功或失败<br>6、在成功或者失败方法中编写要具体做的事。</p>
 </blockquote>
-<p>GitHub地址：<br><strong>(1)依赖库</strong><br>    dependencies {<br>        compile ‘pub.devrel:easypermissions:1.0.1’<br>    }</p>
-<p><strong>(2)再在清单文件中声明要申请的危险权限</strong><br>如果不声明的话，直接在代码中写也能申请成功，但是好想不会弹出询问框，直接就申请了</p>
-<p><strong>(3)申请权限</strong><br>可以直接申请<br>    EasyPermissions.requestPermissions(<br>                        MainActivity.this,<br>                        “申请权限”,<br>                        0,<br>                        Manifest.permission.WRITE_EXTERNAL_STORAGE,<br>                        Manifest.permission.RECORD_AUDIO);<br>最好还是检查一下权限是否申请：<br><strong>EasyPermissions.hasPermissions(Context context, @NonNull String… perms)</strong>方法来检测一个或者多个权限是否被允许，第二个参数是个可变数组，可以申请多个<br>    String[] perms = {Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};<br>    if (EasyPermissions.hasPermissions(this, perms)) {</p>
-<pre><code>    // 已经申请过权限，做想做的事
-} else {
-    // 没有申请过权限，现在去申请
-    EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale),
-            RC_CAMERA_AND_LOCATION, perms);
-}
-</code></pre><p>下面来说一个申请权限这个方法：<br>EasyPermissions.requestPermissions():<img src="/img/bVZBii" alt="图片描述"></p>
+<p>GitHub地址：<br><strong>(1)依赖库</strong><br>​    dependencies {<br>​        compile ‘pub.devrel:easypermissions:1.0.1’<br>​    }<br>​<br><strong>(2)再在清单文件中声明要申请的危险权限</strong><br>如果不声明的话，直接在代码中写也能申请成功，但是好想不会弹出询问框，直接就申请了</p>
+<p><strong>(3)申请权限</strong><br>可以直接申请<br>​    EasyPermissions.requestPermissions(<br>​                        MainActivity.this,<br>​                        “申请权限”,<br>​                        0,<br>​                        Manifest.permission.WRITE_EXTERNAL_STORAGE,<br>​                        Manifest.permission.RECORD_AUDIO);<br>最好还是检查一下权限是否申请：<br><strong>EasyPermissions.hasPermissions(Context context, @NonNull String… perms)</strong>方法来检测一个或者多个权限是否被允许，第二个参数是个可变数组，可以申请多个<br>​    String[] perms = {Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};<br>​    if (EasyPermissions.hasPermissions(this, perms)) {<br>​<br>        // 已经申请过权限，做想做的事<br>    } else {<br>        // 没有申请过权限，现在去申请<br>        EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale),<br>                RC_CAMERA_AND_LOCATION, perms);<br>    }</p>
+<p>下面来说一个申请权限这个方法：<br>EasyPermissions.requestPermissions():<img src="/img/bVZBii" alt="图片描述"></p>
 <p>requestPermissions() 一般用这个四个参数的就可以<br>第一个参数：Context对象<br>第二个参数：权限弹窗上的文字提示语。告诉用户，这个权限用途。<br>第三个参数：这次请求权限的唯一标识请求码，code。<br>第四个参数 : 一些系列的权限。<br>   这里说一下第二个参数，不是第一次申请系统默认弹出的提示语，而是，我们拒绝后，再次点击申请弹出的对话框，，显示我们设置的提示语，下面有两个按钮，确认和取消，我就不贴图了。</p>
-<p>还有六个参数的，多了两个参数就是，修改我们上面那个确认和取消的字样，你可以干成yes 和no. </p>
-<p><strong>4、重写onRequestPermissionsResult()方法，把执行操作给easyPermissions    </strong><br>一行代码就搞定了<br>     @Override<br>    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {<br>        super.onRequestPermissionsResult(requestCode, permissions, grantResults);<br>        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);<br>    }</p>
-<p><strong>5、实现EasyPermissions.PermissionCallbacks接口，重写两个方法</strong><br>    public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {</p>
+<p>还有六个参数的，多了两个参数就是，修改我们上面那个确认和取消的字样，你可以干成yes 和no.<br>​<br><strong>4、重写onRequestPermissionsResult()方法，把执行操作给easyPermissions    </strong><br>一行代码就搞定了<br>​     @Override<br>​    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {<br>​        super.onRequestPermissionsResult(requestCode, permissions, grantResults);<br>​        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);<br>​    }</p>
+<p><strong>5、实现EasyPermissions.PermissionCallbacks接口，重写两个方法</strong><br>​    public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {</p>
 <pre><code>@Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -525,7 +517,7 @@ if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
     //弹出个对话框
 }
 </code></pre><p>}                 </p>
-<p>当然我们可以定制一下这个对话框：<br>    @Override<br>    public void onPermissionsDenied(int requestCode, List<string> perms) {<br>        //处理权限名字字符串<br>        StringBuffer sb = new StringBuffer();<br>        for (String str : perms){<br>            sb.append(str);<br>            sb.append(“\n”);<br>        }<br>        sb.replace(sb.length() - 2,sb.length(),””);</string></p>
+<p>当然我们可以定制一下这个对话框：<br>​    @Override<br>​    public void onPermissionsDenied(int requestCode, List<string> perms) {<br>​        //处理权限名字字符串<br>​        StringBuffer sb = new StringBuffer();<br>​        for (String str : perms){<br>​            sb.append(str);<br>​            sb.append(“\n”);<br>​        }<br>​        sb.replace(sb.length() - 2,sb.length(),””);</string></p>
 <pre><code>    switch (requestCode){
         case 0:
             Toast.makeText(this, &quot;已拒绝权限&quot; + perms.get(0), Toast.LENGTH_SHORT).show();
@@ -583,7 +575,7 @@ if (EasyPermissions.hasPermissions(this, perms)) {
       
         <div class="post-tags">
           
-            <a href="/tags/android/" rel="tag"># android</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
         </div>
       
