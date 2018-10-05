@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="大纲1、实现打印sql语句以及切换数据源2、springboot 整合mybatis增删改查实例3、整合事务示例（简单事务介绍） ###1、实现打印sql语句以及切换数据源（1）添加打印sql 配置每次通过接口往数据库写入信息，如果我们想查看mybatis实际编译的sql语句，可以使用如下方法：在配置文件application.properties 文件中添加如下代码12#增加打印sql语句，一般">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql">
+<meta property="og:url" content="http://yoursite.com/2018/10/06/springboot/SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="大纲1、实现打印sql语句以及切换数据源2、springboot 整合mybatis增删改查实例3、整合事务示例（简单事务介绍） ###1、实现打印sql语句以及切换数据源（1）添加打印sql 配置每次通过接口往数据库写入信息，如果我们想查看mybatis实际编译的sql语句，可以使用如下方法：在配置文件application.properties 文件中添加如下代码12#增加打印sql语句，一般">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20180906102545.png?imageslim">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180906/6EF6i3GICg.png?imageslim">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180906/bHKK3L16lF.png?imageslim">
+<meta property="og:updated_time" content="2018-10-05T16:26:39.329Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql">
+<meta name="twitter:description" content="大纲1、实现打印sql语句以及切换数据源2、springboot 整合mybatis增删改查实例3、整合事务示例（简单事务介绍） ###1、实现打印sql语句以及切换数据源（1）添加打印sql 配置每次通过接口往数据库写入信息，如果我们想查看mybatis实际编译的sql语句，可以使用如下方法：在配置文件application.properties 文件中添加如下代码12#增加打印sql语句，一般">
+<meta name="twitter:image" content="http://oima95jt3.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20180906102545.png?imageslim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/06/springboot/SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql/"/>
+
+
+
+
+
+  <title>SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/springboot/SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-06T00:00:00+08:00">
+                2018-10-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h3><p>1、实现打印sql语句以及切换数据源<br>2、springboot 整合mybatis增删改查实例<br>3、整合事务示例（简单事务介绍）</p>
+<p>###1、实现打印sql语句以及切换数据源<br>（1）添加打印sql 配置<br>每次通过接口往数据库写入信息，如果我们想查看mybatis实际编译的sql语句，可以使用如下方法：<br>在配置文件application.properties 文件中添加如下代码<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#增加打印sql语句，一般用于本地开发测试</span><br><span class="line">mybatis<span class="selector-class">.configuration</span><span class="selector-class">.log-impl</span>=org<span class="selector-class">.apache</span><span class="selector-class">.ibatis</span><span class="selector-class">.logging</span><span class="selector-class">.stdout</span><span class="selector-class">.StdOutImpl</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oima95jt3.bkt.clouddn.com/TIM%E6%88%AA%E5%9B%BE20180906102545.png?imageslim" alt="mark"><br>（2）切换数据源<br>可以再配置文件中设置数据源，默认使用的是HikariDataSource ，我们也可以改为 阿里巴巴的 DruidDataSource数据源<br>配置文件如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#数据源</span><br><span class="line">#如果不使用默认的数据源 （com<span class="selector-class">.zaxxer</span><span class="selector-class">.hikari</span><span class="selector-class">.HikariDataSource</span>）</span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.type</span>=com<span class="selector-class">.alibaba</span><span class="selector-class">.druid</span><span class="selector-class">.pool</span><span class="selector-class">.DruidDataSource</span></span><br></pre></td></tr></table></figure></p>
+<p>如果使用阿里巴巴的数据源 需要在pom文件中添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入第三方数据源 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>###2、springboot 整合mybatis增删改查实例</p>
+<p>直接上代码：</p>
+<p>####UserMapper类<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">package</span> <span class="selector-tag">code</span><span class="selector-class">.mapper</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">code</span><span class="selector-class">.domain</span><span class="selector-class">.User</span>;</span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">org</span><span class="selector-class">.apache</span><span class="selector-class">.ibatis</span><span class="selector-class">.annotations</span>.*;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">import</span> <span class="selector-tag">java</span><span class="selector-class">.util</span><span class="selector-class">.List</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">public</span> <span class="selector-tag">interface</span> <span class="selector-tag">UserMapper</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="variable">@Insert</span>(<span class="string">"insert into user(name,create_time,age,phone) values(#&#123;name&#125;,#&#123;createTime&#125;,#&#123;age&#125;,#&#123;phone&#125;)"</span>)</span><br><span class="line">    <span class="variable">@Options</span>(useGeneratedKeys = true,keyProperty = <span class="string">"id"</span>,keyColumn = <span class="string">"id"</span>)</span><br><span class="line">    int insert(User user);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 功能描述：查找全部</span></span><br><span class="line"><span class="comment">     * @return</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="variable">@Select</span>(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line">    <span class="variable">@Results</span>(&#123;</span><br><span class="line">            <span class="variable">@Result</span>(column = <span class="string">"create_time"</span>,property = <span class="string">"createTime"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    List&lt;User&gt; getAll();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="variable">@Select</span>(<span class="string">"SELECT * FROM user WHERE id=#&#123;id&#125;"</span>)</span><br><span class="line">    <span class="variable">@Results</span>(&#123;</span><br><span class="line">            <span class="variable">@Result</span>(column = <span class="string">"create_time"</span>,property = <span class="string">"createTime"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    User findById(long id);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 功能描述：更新对象</span></span><br><span class="line"><span class="comment">     * @param user</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="variable">@Update</span>(<span class="string">"UPDATE user SET name=#&#123;name&#125; WHERE id =#&#123;id&#125;"</span>)</span><br><span class="line">    void update(User user);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 功能描述：根据id删除用户</span></span><br><span class="line"><span class="comment">     * @param userId</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="variable">@Delete</span>(<span class="string">"DELETE FROM user WHERE id =#&#123;userId&#125;"</span>)</span><br><span class="line">    void delete(long userId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里用到了几个注解@Insert、 @Select 、@Update  、@Delete 看名字就能看出来是增删改查的操作，然后后面跟上sql语句，没什么难的。<br>还有一个注解要注意下@Results   ,当数据表的字段和 User 类的属性名称不完全一致的时候，需要说明下映射<br>比如这里，数据库user表是 create_time ,而user类使用的是驼峰命名，createTime,这个时候如果不添加映射，数据就写不进去。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Results</span>(&#123;</span><br><span class="line">            <span class="variable">@Result</span>(column = <span class="string">"create_time"</span>,property = <span class="string">"createTime"</span>)</span><br><span class="line">            <span class="comment">//这里可以添加多个字段的映射</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<p>当然还可以设置id，因为如果多个地方都用到，每次写一遍就太麻烦了，所以，就写一次，声明id，然后直接引用id。这个看下面其他的例子把，下面贴一下网上总结的用法：</p>
+<p>#####@Results用法总结<br>MyBatis中使用@Results注解来映射查询结果集到实体类属性。</p>
+<p>（1）@Results的基本用法。当数据库字段名与实体类对应的属性名不一致时，可以使用@Results映射来将其对应起来。column为数据库字段名，porperty为实体类属性名，jdbcType为数据库字段数据类型，id为是否为主键。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Select</span>(&#123;<span class="string">"select id, name, class_id from my_student"</span>&#125;)</span><br><span class="line"><span class="variable">@Results</span>(&#123;</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"id"</span>, property=<span class="string">"id"</span>, jdbcType=JdbcType.INTEGER, id=true),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"name"</span>, property=<span class="string">"name"</span>, jdbcType=JdbcType.VARCHAR),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"class_id "</span>, property=<span class="string">"classId"</span>, jdbcType=JdbcType.INTEGER)</span><br><span class="line">&#125;)</span><br><span class="line">List&lt;Student&gt; selectAll();</span><br></pre></td></tr></table></figure>
+<p>如上所示的数据库字段名class_id与实体类属性名classId，就通过这种方式建立了映射关系。</p>
+<p>（2）@ResultMap的用法。当这段@Results代码需要在多个方法用到时，为了提高代码复用性，我们可以为这个@Results注解设置id，然后使用@ResultMap注解来复用这段代码。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Select</span>(&#123;<span class="string">"select id, name, class_id from my_student"</span>&#125;)</span><br><span class="line"><span class="variable">@Results</span>(id=<span class="string">"studentMap"</span>, value=&#123;</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"id"</span>, property=<span class="string">"id"</span>, jdbcType=JdbcType.INTEGER, id=true),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"name"</span>, property=<span class="string">"name"</span>, jdbcType=JdbcType.VARCHAR),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"class_id "</span>, property=<span class="string">"classId"</span>, jdbcType=JdbcType.INTEGER)</span><br><span class="line">&#125;)</span><br><span class="line">List&lt;Student&gt; selectAll();</span><br><span class="line"> </span><br><span class="line"><span class="variable">@Select</span>(&#123;<span class="string">"select id, name, class_id from my_student where id = #&#123;id&#125;"</span>&#125;)</span><br><span class="line"><span class="variable">@ResultMap</span>(value=<span class="string">"studentMap"</span>)</span><br><span class="line">Student selectById(integer id);</span><br></pre></td></tr></table></figure>
+<p>（3）@One的用法。当我们需要通过查询到的一个字段值作为参数，去执行另外一个方法来查询关联的内容，而且两者是一对一关系时，可以使用@One注解来便捷的实现。比如当我们需要查询学生信息以及其所属班级信息时，需要以查询到的class_id为参数，来执行ClassesMapper中的selectById方法，从而获得学生所属的班级信息。可以使用如下代码。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Select</span>(&#123;<span class="string">"select id, name, class_id from my_student"</span>&#125;)</span><br><span class="line"><span class="variable">@Results</span>(id=<span class="string">"studentMap"</span>, value=&#123;</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"id"</span>, property=<span class="string">"id"</span>, jdbcType=JdbcType.INTEGER, id=true),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"name"</span>, property=<span class="string">"name"</span>, jdbcType=JdbcType.VARCHAR),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"class_id "</span>, property=<span class="string">"myClass"</span>, javaType=MyClass.class,</span><br><span class="line">        one=<span class="variable">@One</span>(select=<span class="string">"com.my.mybatis.mapper.MyClassMapper.selectById"</span>))</span><br><span class="line">&#125;)</span><br><span class="line">List&lt;Student&gt; selectAllAndClassMsg();</span><br></pre></td></tr></table></figure>
+<p>（4）@Many的用法。与@One类似，只不过如果使用@One查询到的结果是多行，会抛出TooManyResultException异常，这种时候应该使用的是@Many注解，实现一对多的查询。比如在需要查询学生信息和每次考试的成绩信息时。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">@Select</span>(&#123;<span class="string">"select id, name, class_id from my_student"</span>&#125;)</span><br><span class="line"><span class="variable">@Results</span>(id=<span class="string">"studentMap"</span>, value=&#123;</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"id"</span>, property=<span class="string">"id"</span>, jdbcType=JdbcType.INTEGER, id=true),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"name"</span>, property=<span class="string">"name"</span>, jdbcType=JdbcType.VARCHAR),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"class_id "</span>, property=<span class="string">"classId"</span>, jdbcType=JdbcType.INTEGER),</span><br><span class="line">    <span class="variable">@Result</span>(column=<span class="string">"id"</span>, property=<span class="string">"gradeList"</span>, javaType=List.class,</span><br><span class="line">        many=<span class="variable">@Many</span>(select=<span class="string">"com.my.mybatis.mapper.GradeMapper.selectByStudentId"</span>))</span><br><span class="line">&#125;)</span><br><span class="line">List&lt;Student&gt; selectAllAndGrade();</span><br></pre></td></tr></table></figure>
+<h3 id="还有一种更简单的方式来映射实体类"><a href="#还有一种更简单的方式来映射实体类" class="headerlink" title="还有一种更简单的方式来映射实体类"></a>还有一种更简单的方式来映射实体类</h3><p>直接在清单文件中添加配置，就可以忽略驼峰命名参数<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#数据库字段下划线和Java实体类映射</span><br><span class="line"> 	 	# mybatis 下划线转驼峰配置,两者都可以</span><br><span class="line">		#mybatis.<span class="keyword">configuration</span>.mapUnderscoreToCamelCase=<span class="literal">true</span></span><br><span class="line">		mybatis.<span class="keyword">configuration</span>.<span class="keyword">map</span>-underscore-<span class="keyword">to</span>-camel-<span class="keyword">case</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>####UserController类</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">package code.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> code.domain.JsonData;</span><br><span class="line"><span class="keyword">import</span> code.domain.User;</span><br><span class="line"><span class="keyword">import</span> code.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> code.services.interfaces.UserService;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.<span class="keyword">factory</span>.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.<span class="built_in">List</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user"</span>)</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserMapper userMapper;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/insert"</span>)</span><br><span class="line">    public <span class="built_in">Object</span> insertUser(<span class="meta">@RequestParam</span>(required = <span class="keyword">true</span>) <span class="built_in">String</span> name, <span class="meta">@RequestParam</span>(required = <span class="keyword">true</span>) <span class="built_in">int</span> age, <span class="meta">@RequestParam</span>(required = <span class="keyword">true</span>) <span class="built_in">String</span> phone) &#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setName(name);</span><br><span class="line">        user.setAge(age);</span><br><span class="line">        user.setPhone(phone);</span><br><span class="line">        user.setCreateTime(<span class="keyword">new</span> Date());</span><br><span class="line">        <span class="built_in">int</span> id = userService.insert(user);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JsonData().buildSuccess(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/get_all"</span>)</span><br><span class="line">    public <span class="built_in">Object</span>  getAll()&#123;</span><br><span class="line">        <span class="built_in">List</span>&lt;User&gt; all = userMapper.getAll();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JsonData().buildSuccess(all,<span class="string">"200"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/find_by_id"</span>)</span><br><span class="line">    public <span class="built_in">Object</span> findById(<span class="meta">@RequestParam</span>(name = <span class="string">"user_id"</span>,required = <span class="keyword">true</span>) long id)&#123;</span><br><span class="line"></span><br><span class="line">        User byId = userMapper.findById(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JsonData().buildSuccess(byId,<span class="string">"200"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/delete"</span>)</span><br><span class="line">    public <span class="built_in">Object</span> deleteById(<span class="built_in">int</span> id)&#123;</span><br><span class="line">        userMapper.delete(id);</span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">new</span> JsonData().buildSuccess();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/update"</span>)</span><br><span class="line">    public <span class="built_in">Object</span> updateById(<span class="built_in">String</span> name,<span class="built_in">int</span> id)&#123;</span><br><span class="line">        User user=<span class="keyword">new</span> User();</span><br><span class="line">        user.setId(id);</span><br><span class="line">        user.setName(name);</span><br><span class="line">        userMapper.update(user);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JsonData().buildSuccess();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###3、整合事务示例（简单事务介绍）</p>
+<p>####事务简介<br>    1、事务基本上分为单机事务 、分布式事务。我们常见的是单机事务，比如买东西付款，开启事务，一方扣款，一方收款，全部完成操作，此次事务才算解说。。如果是分布式事务就相当复杂了，多个数据库和服务器，所以需要用消息队列进行处理了。</p>
+<pre><code>2、讲解场景的隔离级别
+    Serializable： 最严格，串行处理，消耗资源大
+
+    Repeatable Read：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据
+
+    Read Committed：大多数主流数据库的默认事务等级
+
+    Read Uncommitted：保证了读取过程中不会读取到非法数据。
+
+3、讲解常见的传播行为
+    PROPAGATION_REQUIRED--支持当前事务，如果当前没有事务，就新建一个事务,最常见的选择。
+
+    PROPAGATION_SUPPORTS--支持当前事务，如果当前没有事务，就以非事务方式执行。
+
+    PROPAGATION_MANDATORY--支持当前事务，如果当前没有事务，就抛出异常。
+
+    PROPAGATION_REQUIRES_NEW--新建事务，如果当前存在事务，把当前事务挂起, 两个事务之间没有关系，一个异常，一个提交，不会同时回滚
+
+    PROPAGATION_NOT_SUPPORTED--以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+
+    PROPAGATION_NEVER--以非事务方式执行，如果当前存在事务，则抛出异常
+</code></pre><p>####简单的开启事务实战。<br>我们使用最常见的传播行为，<code>propagation=Propagation.REQUIRED</code><br>由于上面我们直接controller层调用mapper层，没有经过service层写代码，因为操作简单，所以没必要再写一遍。<br>现在我们试一下通过service层 添加事务<br>UserServiceImpl类中添加如下代码，，并且再UserService中已经添加了接口<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">@Transactional(propagation=Propagation.REQUIRED)</span><br><span class="line">public int addAccount() &#123;</span><br><span class="line">    User <span class="keyword">user</span> = new User();</span><br><span class="line">    <span class="keyword">user</span>.<span class="built_in">set</span>Age(<span class="number">100</span>);</span><br><span class="line">    <span class="keyword">user</span>.<span class="built_in">set</span>CreateTime(new Date());</span><br><span class="line">    <span class="keyword">user</span>.<span class="built_in">set</span>Name(<span class="string">"事务测试"</span>);</span><br><span class="line">    <span class="keyword">user</span>.<span class="built_in">set</span>Phone(<span class="string">"110110110"</span>);</span><br><span class="line">    <span class="keyword">user</span>Mapper.insert(<span class="keyword">user</span>);</span><br><span class="line">    int i = <span class="number">100</span>/<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码是开启了事务，然后王数据库添加信息，然后执行异常，这样测试下数据库到底有没有写入信息。<br>UserController:<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   	<span class="comment">//测试事务</span></span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"transac"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="function">Object <span class="title">transac</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> id = userService.addAccount();</span><br><span class="line">    <span class="function"><span class="keyword">return</span> JsonData.<span class="title">buildSuccess</span><span class="params">(id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行程序，查看log和 数据表</p>
+<p><img src="http://oima95jt3.bkt.clouddn.com/blog/180906/6EF6i3GICg.png?imageslim" alt="mark"><br><img src="http://oima95jt3.bkt.clouddn.com/blog/180906/bHKK3L16lF.png?imageslim" alt="mark"></p>
+<p>如果不加事务，虽然也会报错，但是确实已经执行了sql，写入了数据库</p>
+<p>以上只是一个简单的增删该查的实例，可以直观的了解springboot整合mybatis，通过sql语句对数据库进行操作。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/06/springboot/SpringBoot入门笔记06——配置文件的介绍/" rel="next" title="SpringBoot入门笔记06——配置文件的介绍">
+                <i class="fa fa-chevron-left"></i> SpringBoot入门笔记06——配置文件的介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/06/springboot/Springboot入门笔记05——springboot 注解整合mybatis/" rel="prev" title="Springboot入门笔记05——springboot 注解整合mybatis">
+                Springboot入门笔记05——springboot 注解整合mybatis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#大纲"><span class="nav-number">1.</span> <span class="nav-text">大纲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#还有一种更简单的方式来映射实体类"><span class="nav-number">2.</span> <span class="nav-text">还有一种更简单的方式来映射实体类</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

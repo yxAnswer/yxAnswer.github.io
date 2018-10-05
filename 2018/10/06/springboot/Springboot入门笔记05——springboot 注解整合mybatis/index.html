@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="1、springboot 持久化数据方式介绍 1、原始java访问数据库​        开发流程麻烦​        （1）注册驱动/加载驱动​            Class.forName(“com.mysql.jdbc.Driver”)​        （2）建立连接​            Connection con = DriverManager.getConnection(“jd">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Springboot入门笔记05——springboot 注解整合mybatis">
+<meta property="og:url" content="http://yoursite.com/2018/10/06/springboot/Springboot入门笔记05——springboot 注解整合mybatis/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="1、springboot 持久化数据方式介绍 1、原始java访问数据库​        开发流程麻烦​        （1）注册驱动/加载驱动​            Class.forName(“com.mysql.jdbc.Driver”)​        （2）建立连接​            Connection con = DriverManager.getConnection(“jd">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/180831/Ca5EdLj1BH.png?imageslim">
+<meta property="og:updated_time" content="2018-10-05T16:27:26.506Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Springboot入门笔记05——springboot 注解整合mybatis">
+<meta name="twitter:description" content="1、springboot 持久化数据方式介绍 1、原始java访问数据库​        开发流程麻烦​        （1）注册驱动/加载驱动​            Class.forName(“com.mysql.jdbc.Driver”)​        （2）建立连接​            Connection con = DriverManager.getConnection(“jd">
+<meta name="twitter:image" content="http://oima95jt3.bkt.clouddn.com/blog/180831/Ca5EdLj1BH.png?imageslim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/06/springboot/Springboot入门笔记05——springboot 注解整合mybatis/"/>
+
+
+
+
+
+  <title>Springboot入门笔记05——springboot 注解整合mybatis | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/springboot/Springboot入门笔记05——springboot 注解整合mybatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Springboot入门笔记05——springboot 注解整合mybatis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-06T00:00:00+08:00">
+                2018-10-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1、springboot-持久化数据方式介绍"><a href="#1、springboot-持久化数据方式介绍" class="headerlink" title="1、springboot 持久化数据方式介绍"></a>1、springboot 持久化数据方式介绍</h3><blockquote>
+<p>1、原始java访问数据库<br>​        开发流程麻烦<br>​        （1）注册驱动/加载驱动<br>​            Class.forName(“com.mysql.jdbc.Driver”)<br>​        （2）建立连接<br>​            Connection con = DriverManager.getConnection(“jdbc:mysql://localhost:3306/dbname”,”root”,”root”);<br>​        （3）创建Statement<br>​        （4）执行SQL语句<br>​        （5）处理结果集<br>​          (6)关闭连接，释放资源<br>​    2、apache dbutils框架<br>​        比上一步简单点<br>​        官网:<a href="https://commons.apache.org/proper/commons-dbutils/" target="_blank" rel="noopener">https://commons.apache.org/proper/commons-dbutils/</a><br>​    3、jpa框架<br>​        spring-data-jpa<br>​        jpa在复杂查询的时候性能不是很好<br>​    4、Hiberante   解释：ORM：对象关系映射Object Relational Mapping<br>​        企业大都喜欢使用hibernate<br>​    5、Mybatis框架<br>​        互联网行业通常使用mybatis<br>​        不提供对象和关系模型的直接映射,半ORM</p>
+</blockquote>
+<p>###springboot 集成mybatis 的步骤<br>1、pom.xml添加依赖<br>2、配置文件配置 jdbc  数据库连接地址、以及数据源等等<br>3、分包进行分层，编码结构清晰<br>4、创建表和相应的pojo类<br>5、实现mapper或者叫dao 层的功能编码，sql注入<br>6、实现service层的编码，调用dao层实现操作数据库<br>7、实现controller 层的代码，编写外部调用接口，内部调用service层方法处理mapper层的数据<br>8、添加@MapperScan注解，运行程序，调试bug,可能会修改配置比如mysql serverTimezone的影响，测试</p>
+<p>####1、首先来添加mybatis的相关依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入starter--&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">					    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">					    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">					    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">					    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span>			    </span><br><span class="line">					<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		 			</span><br><span class="line">		 	<span class="comment">&lt;!-- MySQL的JDBC驱动包	--&gt;</span>	</span><br><span class="line">		 			<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span> </span><br><span class="line">			<span class="comment">&lt;!-- 引入第三方数据源 --&gt;</span>		</span><br><span class="line">					<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">						<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>####2、修改配置文件application.properties<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#可以自动识别,所以下面这行可写可不写</span><br><span class="line"><span class="selector-id">#spring</span><span class="selector-class">.datasource</span><span class="selector-class">.driver-class-name</span> =com<span class="selector-class">.mysql</span><span class="selector-class">.jdbc</span><span class="selector-class">.Driver</span></span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.driver-class-name</span> =com<span class="selector-class">.mysql</span><span class="selector-class">.cj</span><span class="selector-class">.jdbc</span><span class="selector-class">.Driver</span></span><br><span class="line">#数据库的连接地址，用户名，密码</span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/movie?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=Asia/Shanghai</span></span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.username</span> =root</span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.password</span> =<span class="number">112233</span></span><br><span class="line">#数据源</span><br><span class="line">#如果不使用默认的数据源 （com<span class="selector-class">.zaxxer</span><span class="selector-class">.hikari</span><span class="selector-class">.HikariDataSource</span>）</span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.type</span> =com<span class="selector-class">.alibaba</span><span class="selector-class">.druid</span><span class="selector-class">.pool</span><span class="selector-class">.DruidDataSource</span></span><br></pre></td></tr></table></figure></p>
+<p>这里简单讲解下配置文件：<br>1、首先，声明jdbc的驱动这个可以写也可以不写，springboot 会自动识别当前的jdbc,这里仅供参考<br>2、配置好数据库的连接地址：修改为自己的本地或者远程数据库，这里注意，如果你的表里有time字段，最好设置下serverTimezone ，不设置的话 可能会有错误。。然后是数据库用户名和密码<br>3、数据源：这个可以改也可以不改，默认的是com.zaxxer.hikari.HikariDataSource；但是如果想改的话也可以改为<br>淘宝的这个。</p>
+<p>###3、分包<br>一般写代码都要进行分层，这里最起码我们简单分一下包</p>
+<p><img src="http://oima95jt3.bkt.clouddn.com/blog/180831/Ca5EdLj1BH.png?imageslim" alt="mark"><br>一个简单的项目，打开分为这么几个包，<br>controller：主要方我们的api接口<br>domain:放一些实体类，同javaBean 、pojo 都可以，是我们的module层。<br>mapper:是存放所有访问数据库的接口，同dao.<br>service :业务逻辑层，我们的业务代码都放在这，service 又可以分为 接口 和实现类 两个包进行分类<br>utils:是我们的工具类<br>大家可以根据自己的习惯进行分一下包，然后就开始创建相关类了。</p>
+<p>###4、创建表和相应的pojo类<br>创建表，就打开数据库创建就行了。不管用什么方法，图形界面，命令行都可以。我们这里创建了一个movie数据库，一个user表。 有 id 、name 、create_time、age、phone   这几个字段<br>可以这样建  mysql -u root -p   密码 连接数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> movie;</span><br><span class="line"><span class="keyword">use</span> movie;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">32</span>) primary <span class="keyword">key</span> auto_increment,</span><br><span class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">32</span>) ,</span><br><span class="line">	age  <span class="built_in">int</span>(<span class="number">32</span>),</span><br><span class="line">	phone <span class="built_in">varchar</span>(<span class="number">32</span>),</span><br><span class="line">	create_time  datetime</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>然后创建相应的javaBean User,字段类型一定要和表相对应</p>
+<p>###5、实现mapper或者叫dao 层的功能编码，sql注入<br>在mapper包下创建 UserMapper 类，主要来操作User这个表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.mybatis.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.mybatis.domain.User;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Insert;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Options;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 访问数据库的接口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span>   </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 注意： 这里的#&#123;&#125;内容必须和User 类的属性一一对应；推荐使用#&#123;&#125;取值，不要用$&#123;&#125;,因为存在注入的风险</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Insert</span>(<span class="string">"INSERT INTO USER(name,phone,create_time,age) VALUES(#&#123;name&#125;,#&#123;phone&#125;,#&#123;createTime&#125;,#&#123;age&#125;)"</span>)</span><br><span class="line">    <span class="meta">@Options</span>(useGeneratedKeys = <span class="keyword">true</span>, keyProperty = <span class="string">"id"</span>, keyColumn = <span class="string">"id"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">insert</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Insert（）注解可以将sql 映射user类，然后将数据写入user表   sql语句 values() 值以 #{属性名} 进行一一匹配<br>@Options 配置，主键id是自增长的，我们如果要想把id映射到user类中，需要表明使用主键true，属性名和列名<br>//useGeneratedKeys=true 表示使用主键，true就可以返回。  keyProperty java对象的属性；keyColumn表示数据库的字段<br>mapper方法写完后，就可以写service 层方法进行调用</p>
+<p>###6、实现service层的编码，调用dao层实现操作数据库<br>一般先创建一个UserService 的接口，声明操作数据库的方法，比如需要有增删改查的方法，就在接口中声明。<br>然后创建一个impl 包，用来存放具体实现service的实现类 。比如现在创建一个 UserServiceImpl.java 类。<br>这两个类的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.mybatis.service;</span><br><span class="line"><span class="keyword">import</span> com.mybatis.domain.User;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(User user)</span></span>;</span><br><span class="line">    <span class="comment">//其他方法。</span></span><br><span class="line">    <span class="comment">//删</span></span><br><span class="line">    <span class="comment">//改</span></span><br><span class="line">    <span class="comment">//查</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UserServiceImpl ：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.mybatis.service.impl;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.mybatis.domain.User;</span><br><span class="line"><span class="keyword">import</span> com.mybatis.mapper.UserMapper;</span><br><span class="line"><span class="keyword">import</span> com.mybatis.service.UserService;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        userMapper.insert(user);</span><br><span class="line">        <span class="keyword">int</span> id = user.getId();</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>UserServiceImpl 首先实现了 UserService 接口，重写了操作方法<br>有两个注解 @Service 和 @Autowired   通过注解声明，springmvc就能扫描到这个类，@Autowired封装了自动装配UserMapper  。调用 mapper层的insert() 方法进行注入，还可以拿到id </p>
+<p>###7、实现controller 层的代码，编写外部调用接口，内部调用service层方法处理mapper层的数据</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.mybatis.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.mybatis.domain.JsonData;</span><br><span class="line"><span class="keyword">import</span> com.mybatis.domain.User;</span><br><span class="line"><span class="keyword">import</span> com.mybatis.service.impl.UserServiceImpl;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.<span class="keyword">annotation</span>.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.<span class="keyword">annotation</span>.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.<span class="keyword">annotation</span>.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.<span class="keyword">annotation</span>.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(<span class="meta-string">"/api/v1/user"</span>)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserServiceImpl userService;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 功能描述: user 保存接口</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(<span class="meta-string">"add"</span>)</span></span><br><span class="line">    <span class="keyword">public</span> Object add() &#123;</span><br><span class="line"></span><br><span class="line">        User user = new User();</span><br><span class="line">        user.setAge(<span class="number">22</span>);</span><br><span class="line">        user.setCreateTime(new Date());</span><br><span class="line">        user.setName(<span class="string">"我最帅"</span>);</span><br><span class="line">        user.setPhone(<span class="string">"17615881722"</span>);</span><br><span class="line">        int id = userService.add(user);</span><br><span class="line">        <span class="keyword">return</span> JsonData.buildSuccess(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和前面一样，@RestController<br>@RequestMapping指定路径<br>方法get post根据情况自己定，这里就简单的将一个user对象写入user 表， 至于结果返回 自己定吧。</p>
+<p>###8、添加@MapperScan注解，运行主程序，进行测试，调用接口，查看数据库表。<br><strong>必须在主程序中添加注解@MapperScan(“com.mybatis.mapper”)</strong><br>告诉程序要扫描mapper包，不然写的dao层的代码无法找到</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.mybatis;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.mybatis.spring.annotation.MapperScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@MapperScan</span>(<span class="string">"com.mybatis.mapper"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionApplication</span>  &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>  <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args)&#123;</span><br><span class="line">        SpringApplication.run(ActionApplication.<span class="keyword">class</span>,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/06/springboot/SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql/" rel="next" title="SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql">
+                <i class="fa fa-chevron-left"></i> SpringBoot入门笔记07——Mybatis增删改查以及事务示例，打印sql
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/06/springboot/SpringBoot入门笔记08——Mybatis逆向工程之IDE自动生成实体类/" rel="prev" title="SpringBoot入门笔记08——Mybatis逆向工程之IDE自动生成实体类">
+                SpringBoot入门笔记08——Mybatis逆向工程之IDE自动生成实体类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、springboot-持久化数据方式介绍"><span class="nav-number">1.</span> <span class="nav-text">1、springboot 持久化数据方式介绍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
