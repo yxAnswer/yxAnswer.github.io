@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Springboot使用配置文件的方式来整合mybatismybatis 有两种使用方式，一种是配置文件xml的方式来进行使用，springboot整合mybatis，注解的方式简化  了这种方式，前面已经讲过了springboot如何通过注解的方式来增删改查，接下来，我们试一下使用配置文件的方式来进行增删改查的操作入门。  这里先不详细讲解mybatis 的使用，只是介绍springboot 如">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot入门笔记10——SpringBoot使用配置文件整合mybatis">
+<meta property="og:url" content="http://yoursite.com/2018/10/07/springboot/SpringBoot入门笔记10——springboot配置文件整合mytatis/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="Springboot使用配置文件的方式来整合mybatismybatis 有两种使用方式，一种是配置文件xml的方式来进行使用，springboot整合mybatis，注解的方式简化  了这种方式，前面已经讲过了springboot如何通过注解的方式来增删改查，接下来，我们试一下使用配置文件的方式来进行增删改查的操作入门。  这里先不详细讲解mybatis 的使用，只是介绍springboot 如">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oima95jt3.bkt.clouddn.com/blog/181009/4FDGggacie.png?imageslim">
+<meta property="og:updated_time" content="2018-10-15T14:09:24.935Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot入门笔记10——SpringBoot使用配置文件整合mybatis">
+<meta name="twitter:description" content="Springboot使用配置文件的方式来整合mybatismybatis 有两种使用方式，一种是配置文件xml的方式来进行使用，springboot整合mybatis，注解的方式简化  了这种方式，前面已经讲过了springboot如何通过注解的方式来增删改查，接下来，我们试一下使用配置文件的方式来进行增删改查的操作入门。  这里先不详细讲解mybatis 的使用，只是介绍springboot 如">
+<meta name="twitter:image" content="http://oima95jt3.bkt.clouddn.com/blog/181009/4FDGggacie.png?imageslim">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/07/springboot/SpringBoot入门笔记10——springboot配置文件整合mytatis/"/>
+
+
+
+
+
+  <title>SpringBoot入门笔记10——SpringBoot使用配置文件整合mybatis | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/07/springboot/SpringBoot入门笔记10——springboot配置文件整合mytatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot入门笔记10——SpringBoot使用配置文件整合mybatis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-07T00:00:00+08:00">
+                2018-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Springboot使用配置文件的方式来整合mybatis"><a href="#Springboot使用配置文件的方式来整合mybatis" class="headerlink" title="Springboot使用配置文件的方式来整合mybatis"></a>Springboot使用配置文件的方式来整合mybatis</h3><p>mybatis 有两种使用方式，一种是配置文件xml的方式来进行使用，springboot整合mybatis，注解的方式简化  了这种方式，前面已经讲过了springboot如何通过注解的方式来增删改查，接下来，我们试一下使用配置文件的方式来进行增删改查的操作入门。</p>
+<blockquote>
+<p>这里先不详细讲解mybatis 的使用，只是介绍springboot 如何使用xml方式来进行操作，因为复杂的操作springboot已经替我们做了，如果我们还是写复杂了，那就不用springboot了。</p>
+</blockquote>
+<h4 id="springboot-整合mytais-步骤-–配置篇"><a href="#springboot-整合mytais-步骤-–配置篇" class="headerlink" title="springboot 整合mytais 步骤 –配置篇"></a>springboot 整合mytais 步骤 –配置篇</h4><p>1、添加mybatis 依赖</p>
+<p>2、数据库配置</p>
+<p>3、mapper的配置文件</p>
+<p>4、编写mapper类和映射文件</p>
+<h4 id="1、添加mytatis依赖"><a href="#1、添加mytatis依赖" class="headerlink" title="1、添加mytatis依赖"></a>1、添加mytatis依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入第三方数据源 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="2、数据库配置"><a href="#2、数据库配置" class="headerlink" title="2、数据库配置"></a>2、数据库配置</h4><p>最简单的直接在application.properties配置文件中声明 数据库的地址 用户名密码等，还可以设置其他连接属性，这里就不说了</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.type</span>=com<span class="selector-class">.alibaba</span><span class="selector-class">.druid</span><span class="selector-class">.pool</span><span class="selector-class">.DruidDataSource</span></span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/movie?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=Asia/Shanghai</span></span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.username</span>=root</span><br><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.password</span>=<span class="number">112233</span></span><br></pre></td></tr></table></figure>
+<p>以上配置好就可以连接数据库进行操作了</p>
+<h4 id="3、Mapper-的配置文件"><a href="#3、Mapper-的配置文件" class="headerlink" title="3、Mapper 的配置文件"></a>3、Mapper 的配置文件</h4><p>xml方式使用mybatis，需要在application.properties中声明两个配置属性,例如：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#mybatis</span><br><span class="line">mybatis.mapper-locations= classpath:mybatis/mapper<span class="comment">/**/</span>*.xml</span><br><span class="line">mybatis.config-location= classpath:mybatis/mybatis-config.xml</span><br></pre></td></tr></table></figure>
+<p><code>mybatis.mapper-locations</code> 表示mapper类映射的xml的位置，不然你写的那些sql都找不到，怎么使用</p>
+<p><code>mybatis.config-location</code>表示mybatis的配置文件</p>
+<p>以上配置如下结构：</p>
+<p><img src="http://oima95jt3.bkt.clouddn.com/blog/181009/4FDGggacie.png?imageslim" alt="mark"></p>
+<p>简单的目录结构是这样的。和之前我们用注解的方式没什么区别，springboot使用配置文件只是service层或者是mapper层不一样。</p>
+<p>首先，我们创建了UserMapper,这个接口类，里面声明了一些操作数据库的方法，然后再我们配置文件中<code>mybatis.mapper-locations</code>指定的位置创建相应的xml文件，然后里面编写 sql语句操作数据，进行映射。</p>
+<p><code>mybatis-config.xml</code> 是配置mybatis的配置文件，比如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> <span class="meta">?&gt;</span></span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE configuration</span></span><br><span class="line"><span class="meta">		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"</span></span><br><span class="line"><span class="meta">		"http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">settings</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">"mapUnderscoreToCamelCase"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个可以去官方文档复制，然后改一改里面的<settings> 就好，上面的配置表示的是，mybatis 忽略大小写，避免驼峰命名法和数据库字段大小写不一致。</settings></p>
+<h4 id="4、编写mapper类和映射xml文件"><a href="#4、编写mapper类和映射xml文件" class="headerlink" title="4、编写mapper类和映射xml文件"></a>4、编写mapper类和映射xml文件</h4><p>比如UserMapper.class ,一个最简单的方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">List</span>&lt;User&gt; getAll();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，编写相应的xml映射文件UserMapper.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> <span class="meta">?&gt;</span></span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper</span></span><br><span class="line"><span class="meta">        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"</span></span><br><span class="line"><span class="meta">        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.mybatis.mapper.UserMapper"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"getAll"</span> <span class="attr">resultType</span>=<span class="string">"com.mybatis.domain.User"</span>&gt;</span></span><br><span class="line">   		 select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里只是一个简单的实例，使用起来也很简单。</p>
+<p><code>namespace</code> 表示当前xml是映射的那个mapper类，后面要跟上<strong>全类名</strong></p>
+<p>然后是增删改查，<insert>,<delete>,<update>,<select></select></update></delete></insert></p>
+<p>使用方法都差不多，就是先声明这个操作标签，比如 </p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">select</span> id=<span class="string">"getAll"</span> resultType=<span class="string">"com.mybatis.domain.User"</span>&gt;</span><br><span class="line">   		 <span class="comment">//id 表示mapper类中的方法，getAll()方法</span></span><br><span class="line">   		 <span class="comment">// resultType 是这个方法的返回值类型，返回对象或者集合时，表明类的全类名。</span></span><br><span class="line">&lt;/<span class="keyword">select</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>最后再 <select> 标签中编写sql语句，</select></p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * <span class="keyword">from</span> user  <span class="comment">//这是一个简单的实例 </span></span><br><span class="line"></span><br><span class="line">当然还有很多复杂的，和注解方式一样，也是用#&#123;&#125;，#&#123;&#125; 的这种方式去一一对应数据库和实体类</span><br></pre></td></tr></table></figure>
+<h4 id="5、添加-mapper注解或者使用-mapperScan的方式，让springboot扫描到mapper类"><a href="#5、添加-mapper注解或者使用-mapperScan的方式，让springboot扫描到mapper类" class="headerlink" title="5、添加@mapper注解或者使用@mapperScan的方式，让springboot扫描到mapper类"></a>5、添加@mapper注解或者使用@mapperScan的方式，让springboot扫描到mapper类</h4><p>这一步操作什么时候都行，这里放到最后重点提醒，</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@SpringBootApplication</span></span><br><span class="line"><span class="variable">@MapperScan</span>(<span class="string">"com.mybatis.mapper"</span>)</span><br><span class="line">public class MainApplication &#123;</span><br><span class="line">    <span class="selector-tag">public</span> <span class="selector-tag">static</span> <span class="selector-tag">void</span> <span class="selector-tag">main</span>(String[] args) &#123;</span><br><span class="line">        <span class="selector-tag">SpringApplication</span><span class="selector-class">.run</span>(MainApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如，在启动类里面，加入@mapperScan注解，指明所有的mapper，这样只写一次就可以了。</p>
+<h4 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h4><p>本篇只是记录了下springboot的xml使用方式，</p>
+<p>重点：</p>
+<p>1、application.properties 配置文件中声明位置</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#mybatis</span><br><span class="line">mybatis.mapper-locations= classpath:mybatis/mapper<span class="comment">/**/</span>*.xml</span><br><span class="line">mybatis.config-location= classpath:mybatis/mybatis-config.xml</span><br></pre></td></tr></table></figure>
+<p>2、把原来卸载mapper类中的注解 sql语句，写到 xml的配置文件中</p>
+<p>3、<code>namespace</code>  <code>select</code>等标签的意思要熟悉，    至于映射的全类名和 方法名就可以了</p>
+<p>详细的内容由于时间原因，不想写了，因为官方文档都有，忘记了就去官方文档找</p>
+<p><a href="http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html" target="_blank" rel="noopener">http://www.mybatis.org/mybatis-3/zh/sqlmap-xml.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/07/springboot/SpringBoot入门笔记09——属性配置文件详解以及多环境配置/" rel="next" title="SpringBoot入门笔记09——属性配置文件详解以及多环境配置">
+                <i class="fa fa-chevron-left"></i> SpringBoot入门笔记09——属性配置文件详解以及多环境配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/15/springboot/SpringBoot入门笔记11——springboot定时任务和异步任务/" rel="prev" title="SpringBoot入门笔记11——springboot定时任务和异步任务">
+                SpringBoot入门笔记11——springboot定时任务和异步任务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Springboot使用配置文件的方式来整合mybatis"><span class="nav-number">1.</span> <span class="nav-text">Springboot使用配置文件的方式来整合mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#springboot-整合mytais-步骤-–配置篇"><span class="nav-number">1.1.</span> <span class="nav-text">springboot 整合mytais 步骤 –配置篇</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1、添加mytatis依赖"><span class="nav-number">1.2.</span> <span class="nav-text">1、添加mytatis依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、数据库配置"><span class="nav-number">1.3.</span> <span class="nav-text">2、数据库配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、Mapper-的配置文件"><span class="nav-number">1.4.</span> <span class="nav-text">3、Mapper 的配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、编写mapper类和映射xml文件"><span class="nav-number">1.5.</span> <span class="nav-text">4、编写mapper类和映射xml文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5、添加-mapper注解或者使用-mapperScan的方式，让springboot扫描到mapper类"><span class="nav-number">1.6.</span> <span class="nav-text">5、添加@mapper注解或者使用@mapperScan的方式，让springboot扫描到mapper类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结："><span class="nav-number">1.7.</span> <span class="nav-text">小结：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

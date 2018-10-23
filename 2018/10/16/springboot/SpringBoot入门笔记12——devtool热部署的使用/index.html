@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="技术成长之路" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="SpringBoot 热部署实战spring为开发者提供了一个名为spring-boot-devtools的模块来使Spring Boot应用支持热部署，提高开发者的开发效率，无需手动重启Spring Boot应用。 热部署的原理深层原理是使用了两个ClassLoader，一个Classloader加载那些不会改变的类（第三方Jar包），另一个ClassLoader加载会更改的类，称为restar">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot入门笔记12——springboot devtool热部署的使用">
+<meta property="og:url" content="http://yoursite.com/2018/10/16/springboot/SpringBoot入门笔记12——devtool热部署的使用/index.html">
+<meta property="og:site_name" content="技术成长之路">
+<meta property="og:description" content="SpringBoot 热部署实战spring为开发者提供了一个名为spring-boot-devtools的模块来使Spring Boot应用支持热部署，提高开发者的开发效率，无需手动重启Spring Boot应用。 热部署的原理深层原理是使用了两个ClassLoader，一个Classloader加载那些不会改变的类（第三方Jar包），另一个ClassLoader加载会更改的类，称为restar">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-23T15:27:39.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot入门笔记12——springboot devtool热部署的使用">
+<meta name="twitter:description" content="SpringBoot 热部署实战spring为开发者提供了一个名为spring-boot-devtools的模块来使Spring Boot应用支持热部署，提高开发者的开发效率，无需手动重启Spring Boot应用。 热部署的原理深层原理是使用了两个ClassLoader，一个Classloader加载那些不会改变的类（第三方Jar包），另一个ClassLoader加载会更改的类，称为restar">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/16/springboot/SpringBoot入门笔记12——devtool热部署的使用/"/>
+
+
+
+
+
+  <title>SpringBoot入门笔记12——springboot devtool热部署的使用 | 技术成长之路</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">技术成长之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Simple technology</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/16/springboot/SpringBoot入门笔记12——devtool热部署的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨旭">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oima95jt3.bkt.clouddn.com/aversion.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="技术成长之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot入门笔记12——springboot devtool热部署的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-16T00:00:00+08:00">
+                2018-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="SpringBoot-热部署实战"><a href="#SpringBoot-热部署实战" class="headerlink" title="SpringBoot 热部署实战"></a>SpringBoot 热部署实战</h3><p>spring为开发者提供了一个名为spring-boot-devtools的模块来使Spring Boot应用支持热部署，提高开发者的开发效率，无需手动重启Spring Boot应用。</p>
+<h4 id="热部署的原理"><a href="#热部署的原理" class="headerlink" title="热部署的原理"></a>热部署的原理</h4><p>深层原理是使用了两个ClassLoader，一个Classloader加载那些不会改变的类（第三方Jar包），另一个ClassLoader加载会更改的类，称为restart ClassLoader,这样在有代码更改的时候，原来的restart ClassLoader 被丢弃，重新创建一个restart ClassLoader，由于需要加载的类相比较少，所以实现了较快的重启时间。</p>
+<h4 id="如何使用devtool"><a href="#如何使用devtool" class="headerlink" title="如何使用devtool"></a>如何使用devtool</h4><p>springboot 使用devtool特别简单，首先看官网的地址</p>
+<p><a href="https://docs.spring.io/spring-boot/docs/2.1.0.BUILD-SNAPSHOT/reference/htmlsingle/#using-boot-devtools" target="_blank" rel="noopener">https://docs.spring.io/spring-boot/docs/2.1.0.BUILD-SNAPSHOT/reference/htmlsingle/#using-boot-devtools</a> </p>
+<p>在项目的pom.xml文件下添加依赖，</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//核心依赖包</span></span><br><span class="line"><span class="params">&lt;dependency&gt;</span>  </span><br><span class="line">		  <span class="params">&lt;groupId&gt;</span>org.springframework.boot<span class="params">&lt;/groupId&gt;</span>  </span><br><span class="line">		  <span class="params">&lt;artifactId&gt;</span>spring-boot-devtools<span class="params">&lt;/artifactId&gt;</span>  </span><br><span class="line">		  <span class="params">&lt;optional&gt;</span>true<span class="params">&lt;/optional&gt;</span>  </span><br><span class="line"><span class="params">&lt;/dependency&gt;</span></span><br></pre></td></tr></table></figure>
+<p>由于DevTools监视类路径资源，因此触发重新启动的唯一方法是更新类路径。导致更新类路径的方式取决于您使用的IDE。在eclipse中保存文件就会重启。idea中如果设置自动保存，每自动保存一次就会触发启动一次。</p>
+<h4 id="记录条件评估中的更改"><a href="#记录条件评估中的更改" class="headerlink" title="记录条件评估中的更改"></a>记录条件评估中的更改</h4><p>默认情况下，每次应用程序重新启动时，都会记录一个显示条件评估增量的报告。该报告显示了在进行更改（例如添加或删除Bean以及设置配置属性）时对应用程序的自动配置所做的更改。</p>
+<p>要禁用报告的日志记录，请设置以下属性：</p>
+<p><code>spring.devtools.restart.log-condition-evaluation-delta=false</code></p>
+<h3 id="不包括资源（Excluding-Resources）"><a href="#不包括资源（Excluding-Resources）" class="headerlink" title="不包括资源（Excluding Resources）"></a>不包括资源（Excluding Resources）</h3><p>某些资源在更改时不一定需要触发重启。例如，可以就地编辑Thymeleaf模板。默认情况下，更改/ META-INF / maven，/ META-INF / resources，/ resources，/ static，/ public或/ templates中的资源不会触发重新启动，但会触发实时重新加载。如果要自定义这些排除项，可以使用spring.devtools.restart.exclude属性。</p>
+<p>例如，要仅排除/ static和/ public，您需要设置以下属性：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring<span class="selector-class">.devtools</span><span class="selector-class">.restart</span><span class="selector-class">.exclude</span>=static<span class="comment">/**,public/**</span></span><br></pre></td></tr></table></figure>
+<p>如果要保留这些默认值并添加其他排除项，请改用<code>spring.devtools.restart.additional-exclude</code>属性。</p>
+<h3 id="禁用重启"><a href="#禁用重启" class="headerlink" title="禁用重启"></a>禁用重启</h3><p>如果您不想使用重启功能，可以使用<code>spring.devtools.restart.enabled</code>属性将其禁用。在大多数情况下，您可以在<code>application.properties中</code>设置此属性（这样做仍会初始化重新启动的类加载器，但它不会监视文件更改）。</p>
+<p>如果需要完全禁用重新启动支持（例如，因为它不能与特定库一起使用），则需要在调用SpringApplication.run（…）之前将spring.devtools.restart.enabled System属性设置为false，如如下例所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	System.setProperty(<span class="string">"spring.devtools.restart.enabled"</span>, <span class="string">"false"</span>);</span><br><span class="line">	SpringApplication.run(MyApp.class, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用触发器文件（Using-a-Trigger-File）"><a href="#使用触发器文件（Using-a-Trigger-File）" class="headerlink" title="使用触发器文件（Using a Trigger File）"></a>使用触发器文件（Using a Trigger File）</h4><p>这个应该很有用，创建一个触发器文件来进行热部署</p>
+<p>如果使用不断编译已更改文件的IDE，则可能更喜欢仅在特定时间触发重新启动。为此，您可以使用“触发器文件”，这是一个特殊文件，当您想要实际触发重新启动检查时必须对其进行修改。更改文件只会触发检查，只有在Devtools检测到必须执行某些操作时才会重新启动。触发器文件可以手动更新，也可以使用IDE插件更新。</p>
+<p>要使用触发器文件，请将<code>spring.devtools.restart.trigger-file</code>属性设置为触发器文件的路径。</p>
+<p>您可能希望将<code>spring.devtools.restart.trigger</code>文件设置为全局设置，以便所有项目的行为方式相同</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>还有很多功能，还是看官方文档，用到的时候再去查。对于devtool的使用我觉得，使用eclipse 很简单，ctrl+s就可以了。对于使用Idea 兄弟我觉得使用触发器文件是个非常好的方式。</p>
+<p>首先在application.properties配置文件下配置 触发器文件的路径，比如</p>
+<p><code>spring.devtools.restart.trigger-file=trigger.txt</code></p>
+<p>我们在resources文件夹的根目录创建了一个txt文件 trigger.txt</p>
+<p>里面内容比如 version=1 其实没什么，，只要这个配置文件更改了，就会触发devtool去重新检查启动。</p>
+<p>比如我们更改完我们的代码，想使用热部署，就把1改一下，比如改为2 这个时候就会自动重启。当然还可以用插件，自行百度吧</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/16/springboot/SpringBoot入门笔记13——pageHelper 分页插件使用/" rel="next" title="SpringBoot入门笔记13——pageHelper分页插件使用">
+                <i class="fa fa-chevron-left"></i> SpringBoot入门笔记13——pageHelper分页插件使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://oima95jt3.bkt.clouddn.com/aversion.jpg"
+                alt="杨旭" />
+            
+              <p class="site-author-name" itemprop="name">杨旭</p>
+              <p class="site-description motion-element" itemprop="description">个人技术笔记以及技术积累</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot-热部署实战"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot 热部署实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#热部署的原理"><span class="nav-number">1.1.</span> <span class="nav-text">热部署的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何使用devtool"><span class="nav-number">1.2.</span> <span class="nav-text">如何使用devtool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录条件评估中的更改"><span class="nav-number">1.3.</span> <span class="nav-text">记录条件评估中的更改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不包括资源（Excluding-Resources）"><span class="nav-number">2.</span> <span class="nav-text">不包括资源（Excluding Resources）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#禁用重启"><span class="nav-number">3.</span> <span class="nav-text">禁用重启</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用触发器文件（Using-a-Trigger-File）"><span class="nav-number">3.1.</span> <span class="nav-text">使用触发器文件（Using a Trigger File）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">杨旭</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
